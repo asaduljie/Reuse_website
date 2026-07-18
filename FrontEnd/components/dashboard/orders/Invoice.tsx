@@ -161,10 +161,6 @@ export default function Invoice({
                                 <span>Subtotal</span>
                                 <span className="text-slate-700">Rp {total.toLocaleString("id-ID")}</span>
                             </div>
-                            <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                <span>Pajak (0%)</span>
-                                <span className="text-slate-700">Rp 0</span>
-                            </div>
                             <div className="border-t border-slate-200/60 my-2 pt-2 flex justify-between items-center">
                                 <span className="text-sm font-black text-slate-800 uppercase tracking-wider">Total</span>
                                 <span className="text-lg font-black text-[#145A3B]">
