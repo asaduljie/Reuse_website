@@ -54,19 +54,19 @@ export default function Invoice({
                         padding: 0 !important;
                         width: 100% !important;
                     }
-                    /* Ensure print area is formatted nicely */
+                    /* Ensure print area is formatted nicely with margins from page edge */
                     #invoice-print-area {
                         display: block !important;
                         width: 100% !important;
                         background: white !important;
-                        padding: 0 !important;
+                        padding: 30px 24px !important;
                         margin: 0 !important;
                     }
-                    /* Clean up shadows/borders for print readability */
+                    /* Clean up shadows/borders for print readability and maintain internal spacing */
                     #invoice {
                         box-shadow: none !important;
                         border: none !important;
-                        padding: 0 !important;
+                        padding: 32px 24px !important;
                         margin: 0 !important;
                         max-width: 100% !important;
                     }
