@@ -30,29 +30,45 @@ export default function Invoice({
 }: InvoiceProps) {
     return (
         <>
-            {/* Global style overrides to hide everything else on print */}
             <style dangerouslySetInnerHTML={{__html: `
                 @media print {
-                    body {
-                        background-color: #ffffff !important;
-                    }
-                    /* Hide everything in the body */
-                    body > * {
+                    /* Hide sidebar, topbar header, and any other print-hidden element */
+                    aside, header, .print\\:hidden, [class*="print:hidden"] {
                         display: none !important;
                     }
-                    /* Show only our print area */
+                    /* Reset main container spacing and background */
+                    body, html {
+                        background-color: #ffffff !important;
+                        background: #ffffff !important;
+                    }
+                    /* Reset flex min-h-screen layout container */
+                    div.flex.min-h-screen {
+                        display: block !important;
+                        min-height: 0 !important;
+                        background: transparent !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                    }
+                    main {
+                        margin-left: 0 !important;
+                        padding: 0 !important;
+                        width: 100% !important;
+                    }
+                    /* Ensure print area is formatted nicely */
                     #invoice-print-area {
                         display: block !important;
-                        position: absolute;
-                        left: 0;
-                        top: 0;
                         width: 100% !important;
-                        min-height: 100vh;
                         background: white !important;
-                        padding: 24px !important;
+                        padding: 0 !important;
                         margin: 0 !important;
+                    }
+                    /* Clean up shadows/borders for print readability */
+                    #invoice {
                         box-shadow: none !important;
                         border: none !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                        max-width: 100% !important;
                     }
                 }
             `}} />

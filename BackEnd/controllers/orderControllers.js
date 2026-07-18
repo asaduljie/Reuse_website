@@ -26,21 +26,29 @@ const createOrder = (req, res) => {
     const orderId = result.insertId;
 
     if (items && items.length > 0) {
+      // Build PostgreSQL dynamic bulk insert query
+      let placeholders = [];
+      let flatValues = [];
+      let counter = 1;
+      items.forEach(item => {
+        placeholders.push(`($${counter++}, $${counter++}, $${counter++}, $${counter++}, $${counter++}, $${counter++}, $${counter++})`);
+        flatValues.push(
+          orderId,
+          item.productId || item.id,
+          item.name,
+          item.price,
+          item.quantity || item.qty || 1,
+          item.sellerId || sellerId || 3, // Default mock seller ID
+          item.categoryId || 1 // Default mock category ID
+        );
+      });
+
       const sqlItems = `
         INSERT INTO order_items (order_id, product_id, name, price, qty, seller_id, category_id)
-        VALUES ?
+        VALUES ${placeholders.join(", ")}
       `;
-      const itemsValues = items.map(item => [
-        orderId,
-        item.productId || item.id,
-        item.name,
-        item.price,
-        item.quantity || item.qty || 1,
-        item.sellerId || sellerId || 3, // Default mock seller ID
-        item.categoryId || 1 // Default mock category ID
-      ]);
 
-      db.query(sqlItems, [itemsValues], (err) => {
+      db.query(sqlItems, flatValues, (err) => {
         if (err) {
           return res.status(500).json({ success: false, error: err.message });
         }

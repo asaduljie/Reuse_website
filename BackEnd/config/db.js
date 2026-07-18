@@ -1,117 +1,79 @@
-const mysql = require("mysql2");
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-
-db.getConnection((err, connection) => {
-  if (err) {
-    console.log("Database gagal terkoneksi");
-    console.log(err);
-  } else {
-    console.log("Database berhasil terkoneksi");
-    connection.release();
-
-    const addColumnIfNotExist = (table, column, definition) => {
-      db.query(`SHOW COLUMNS FROM ${table} LIKE '${column}'`, (err, results) => {
-        if (!err && results.length === 0) {
-          db.query(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`, (err) => {
-            if (err) {
-              console.error(`Error adding column '${column}' to '${table}':`, err.message);
-            } else {
-              console.log(`Column '${column}' successfully added to table '${table}'.`);
-            }
-          });
-        }
-      });
+// Connect using DATABASE_URL (for production/cloud) or individual parameters
+const config = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    }
+  : {
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER || "postgres",
+      password: process.env.DB_PASSWORD !== undefined ? process.env.DB_PASSWORD : "password",
+      database: process.env.DB_NAME || "postgres",
+      port: Number(process.env.DB_PORT) || 5432,
+      ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false
     };
-    
-    // Create products table
-    db.query(`
-      CREATE TABLE IF NOT EXISTS products (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        slug VARCHAR(255) DEFAULT NULL,
-        description TEXT,
-        price DECIMAL(10, 2) NOT NULL,
-        stock INT NOT NULL DEFAULT 0,
-        sold INT DEFAULT 0,
-        image VARCHAR(255) DEFAULT NULL,
-        category VARCHAR(255) DEFAULT NULL,
-        status VARCHAR(50) DEFAULT 'active',
-        seller_id INT DEFAULT 3,
-        category_id INT DEFAULT 1,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      )
-    `, (err) => {
-      if (err) {
-        console.error("Error creating table 'products':", err.message);
-      } else {
-        // Run migrations for products
-        addColumnIfNotExist("products", "slug", "VARCHAR(255) DEFAULT NULL");
-        addColumnIfNotExist("products", "sold", "INT DEFAULT 0");
-        addColumnIfNotExist("products", "status", "VARCHAR(50) DEFAULT 'active'");
-        addColumnIfNotExist("products", "seller_id", "INT DEFAULT 3");
-        addColumnIfNotExist("products", "category_id", "INT DEFAULT 1");
 
-        // Create orders table
-        db.query(`
-          CREATE TABLE IF NOT EXISTS orders (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            customerName VARCHAR(255) NOT NULL,
-            phone VARCHAR(50),
-            address TEXT,
-            note TEXT,
-            total DECIMAL(10, 2) NOT NULL,
-            totalItem INT NOT NULL,
-            status VARCHAR(50) DEFAULT 'Pending',
-            customer_id INT DEFAULT NULL,
-            seller_id INT DEFAULT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-          )
-        `, (err) => {
-          if (err) {
-            console.error("Error creating table 'orders':", err.message);
-          } else {
-            // Run migrations for orders
-            addColumnIfNotExist("orders", "customer_id", "INT DEFAULT NULL");
-            addColumnIfNotExist("orders", "seller_id", "INT DEFAULT NULL");
+const pool = new Pool(config);
 
-            // Create order_items table
-            db.query(`
-              CREATE TABLE IF NOT EXISTS order_items (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                order_id INT NOT NULL,
-                product_id INT,
-                name VARCHAR(255) NOT NULL,
-                price DECIMAL(10, 2) NOT NULL,
-                qty INT NOT NULL,
-                seller_id INT DEFAULT NULL,
-                category_id INT DEFAULT NULL,
-                FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
-              )
-            `, (err) => {
-              if (err) {
-                console.error("Error creating table 'order_items':", err.message);
-              } else {
-                // Run migrations for order_items
-                addColumnIfNotExist("order_items", "seller_id", "INT DEFAULT NULL");
-                addColumnIfNotExist("order_items", "category_id", "INT DEFAULT NULL");
-              }
-            });
-          }
-        });
-      }
-    });
+// Verify Connection
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("Database gagal terkoneksi:", err.stack);
+  } else {
+    console.log("Database berhasil terkoneksi ke Supabase PostgreSQL");
+    release();
   }
 });
+
+// compatible db object interface matching mysql2 query interface
+const db = {
+  query: (sql, params, callback) => {
+    let actualParams = params;
+    let actualCallback = callback;
+    if (typeof params === "function") {
+      actualCallback = params;
+      actualParams = [];
+    }
+
+    // Convert MySQL placeholders (?) to PostgreSQL placeholders ($1, $2, etc.)
+    let pgSql = sql;
+    let paramIndex = 1;
+    while (pgSql.includes("?")) {
+      pgSql = pgSql.replace("?", `$${paramIndex++}`);
+    }
+
+    // Auto-append RETURNING id for INSERT queries to mimic insertId behavior
+    if (/^\s*insert\s+into/i.test(pgSql) && !/returning/i.test(pgSql)) {
+      pgSql += " RETURNING id";
+    }
+
+    pool.query(pgSql, actualParams, (err, res) => {
+      if (err) {
+        if (actualCallback) actualCallback(err, null);
+        return;
+      }
+
+      // Map PG results to look exactly like mysql2 results array
+      const mappedRows = res.rows ? [...res.rows] : [];
+      
+      // Attach properties directly to the array so it acts as mysql2 result metadata
+      const insertId = res.rows && res.rows[0] && res.rows[0].id ? Number(res.rows[0].id) : null;
+      
+      // Inject helper properties directly onto the array object
+      Object.defineProperties(mappedRows, {
+        insertId: { value: insertId, writable: true, enumerable: false },
+        affectedRows: { value: res.rowCount, writable: true, enumerable: false }
+      });
+
+      if (actualCallback) {
+        actualCallback(null, mappedRows);
+      }
+    });
+  },
+  end: () => pool.end()
+};
 
 module.exports = db;
