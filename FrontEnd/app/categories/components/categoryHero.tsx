@@ -9,7 +9,7 @@ export default function CategoryHero() {
       className="
       relative
       overflow-hidden
-      rounded-[30px]
+      rounded-[24px] sm:rounded-[30px]
       "
 
       style={{
@@ -35,10 +35,11 @@ export default function CategoryHero() {
         className="
         absolute
         inset-0
-        bg-gradient-to-r
-        from-[#145A3B]/90
-        via-[#145A3B]/75
-        to-transparent
+        bg-[#145A3B]/90
+        sm:bg-gradient-to-r
+        sm:from-[#145A3B]/95
+        sm:via-[#145A3B]/80
+        sm:to-transparent
         "
 
       />
@@ -48,10 +49,9 @@ export default function CategoryHero() {
         className="
         relative
         z-10
-        px-10
-        lg:px-20
-        py-20
-        lg:py-24
+        px-6 sm:px-10 lg:px-20
+        py-12 sm:py-20 lg:py-24
+        text-center sm:text-left
         "
 
       >
@@ -60,15 +60,16 @@ export default function CategoryHero() {
 
           className="
           inline-block
-          px-5
-          py-2
+          px-4
+          py-1.5
           rounded-full
           bg-white/15
           backdrop-blur
-          text-sm
-          font-semibold
+          text-[10px] sm:text-sm
+          font-black
           tracking-widest
           uppercase
+          text-green-200
           "
 
         >
@@ -80,13 +81,13 @@ export default function CategoryHero() {
         <h1
 
           className="
-          mt-6
-          text-5xl
-          lg:text-6xl
-          font-bold
+          mt-4 sm:mt-6
+          text-2xl sm:text-5xl lg:text-6xl
+          font-black
           text-white
           leading-tight
           max-w-xl
+          tracking-tight
           "
 
         >
@@ -102,11 +103,13 @@ export default function CategoryHero() {
         <p
 
           className="
-          mt-6
-          text-lg
-          text-green-100
-          leading-8
+          mt-3 sm:mt-6
+          text-xs sm:text-lg
+          text-emerald-100
+          leading-relaxed
           max-w-xl
+          mx-auto sm:mx-0
+          font-medium
           "
 
         >
@@ -122,25 +125,30 @@ export default function CategoryHero() {
 
           className="
           flex
-          gap-5
-          mt-10
+          flex-col sm:flex-row
+          gap-3 sm:gap-4
+          mt-6 sm:mt-10
+          justify-center sm:justify-start
           "
 
         >
 
-          <Link href="/products">
+          <Link href="/products" className="w-full sm:w-auto">
 
             <button
 
               className="
+              w-full sm:w-auto
               bg-white
               text-[#145A3B]
-              px-8
-              py-4
-              rounded-full
-              font-semibold
+              px-6 sm:px-8
+              py-3.5 sm:py-4
+              rounded-xl sm:rounded-full
+              text-sm
+              font-extrabold
               hover:bg-green-50
               transition
+              cursor-pointer
               "
 
             >
@@ -151,20 +159,23 @@ export default function CategoryHero() {
 
           </Link>
 
-          <Link href="/about">
+          <Link href="/about" className="w-full sm:w-auto">
 
             <button
 
               className="
+              w-full sm:w-auto
               border
-              border-white
+              border-white/30
               text-white
-              px-8
-              py-4
-              rounded-full
-              hover:bg-white
-              hover:text-[#145A3B]
+              px-6 sm:px-8
+              py-3.5 sm:py-4
+              rounded-xl sm:rounded-full
+              text-sm
+              font-extrabold
+              hover:bg-white/10
               transition
+              cursor-pointer
               "
 
             >
