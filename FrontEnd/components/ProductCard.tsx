@@ -1,12 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import ProductActions from "./products/productActions";
-import { getUser } from "../utils/auth";
-import { addToWishlist, removeFromWishlist, isInWishlist } from "../services/wishlistService";
 
 interface Product {
   id: number;
@@ -17,6 +12,8 @@ interface Product {
   category: string;
   image: string;
   imageUrl: string;
+  createdAt?: string;
+  created_at?: string;
 }
 
 interface ProductCardProps {
@@ -26,43 +23,16 @@ interface ProductCardProps {
 export default function ProductCard({
   product,
 }: ProductCardProps) {
-  const router = useRouter();
-  const [favorite, setFavorite] = useState(false);
-
-  useEffect(() => {
-    const user = getUser();
-    if (user) {
-      setFavorite(isInWishlist(user.id, product.id));
+  const isNew = (() => {
+    const createdStr = product.createdAt || product.created_at;
+    if (!createdStr) {
+      return product.id > 2;
     }
-  }, [product.id]);
-
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const user = getUser();
-    if (!user) {
-      alert("Silakan login terlebih dahulu untuk menggunakan fitur Wishlist.");
-      router.push("/login");
-      return;
-    }
-
-    if (favorite) {
-      removeFromWishlist(user.id, product.id);
-      setFavorite(false);
-    } else {
-      addToWishlist({
-        userId: user.id,
-        productId: product.id,
-        productName: product.name,
-        productImage: product.imageUrl,
-        price: product.price,
-        sellerId: 3,
-        sellerName: "ReUse Store",
-      });
-      setFavorite(true);
-    }
-  };
+    const createdDate = new Date(createdStr);
+    const diffTime = Math.abs(new Date().getTime() - createdDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= 7 || product.id > 2;
+  })();
 
   return (
 
@@ -99,6 +69,12 @@ export default function ProductCard({
           "
         >
 
+          {isNew && (
+            <span className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-[#145A3B] text-white text-[9px] sm:text-[10px] font-black uppercase px-2.5 py-0.5 rounded-lg shadow-sm z-20 animate-pulse">
+              New
+            </span>
+          )}
+
           <img
             src={product.imageUrl}
             alt={product.name}
@@ -111,37 +87,6 @@ export default function ProductCard({
             duration-300
             "
           />
-
-          <button
-            onClick={handleWishlist}
-            className="
-            absolute
-            top-2 right-2 sm:top-4 sm:right-4
-            w-8 h-8 sm:w-10 sm:h-10
-            rounded-full
-            bg-white/90
-            backdrop-blur-sm
-            shadow-md
-            flex
-            items-center
-            justify-center
-            hover:bg-red-50
-            transition
-            cursor-pointer
-            z-20
-            "
-          >
-
-            <FaHeart
-              className={`
-              text-xs sm:text-sm
-              transition-colors
-              duration-300
-              ${favorite ? "text-red-500" : "text-gray-400 hover:text-red-500"}
-              `}
-            />
-
-          </button>
 
         </div>
 

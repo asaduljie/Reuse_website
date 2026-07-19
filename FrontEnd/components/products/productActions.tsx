@@ -15,6 +15,8 @@ import {
   updateQuantity,
   removeCart,
 } from "../../services/cartService";
+import { getUser } from "../../utils/auth";
+import { addToWishlist, removeFromWishlist, isInWishlist } from "../../services/wishlistService";
 
 interface Product {
   id: number;
@@ -49,7 +51,40 @@ export default function ProductActions({
     if (item) {
       setQty(item.qty);
     }
+
+    const user = getUser();
+    if (user) {
+      setLiked(isInWishlist(user.id, product.id));
+    }
   }, [product.id]);
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const user = getUser();
+    if (!user) {
+      alert("Silakan login terlebih dahulu untuk menggunakan fitur Wishlist.");
+      router.push("/login");
+      return;
+    }
+
+    if (liked) {
+      removeFromWishlist(user.id, product.id);
+      setLiked(false);
+    } else {
+      addToWishlist({
+        userId: user.id,
+        productId: product.id,
+        productName: product.name,
+        productImage: product.imageUrl,
+        price: product.price,
+        sellerId: 3,
+        sellerName: "ReUse Store",
+      });
+      setLiked(true);
+    }
+  };
 
   const showAddedBadge = () => {
     setAdded(true);
@@ -119,12 +154,7 @@ export default function ProductActions({
         {/* Wishlist */}
 
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            setLiked(!liked);
-          }}
+          onClick={handleWishlist}
           className="
           w-9 sm:w-11
           h-9 sm:h-11
