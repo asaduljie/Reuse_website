@@ -113,8 +113,8 @@ export default function ProductActions({
   };
 
   return (
-    <div className="flex justify-end items-center mt-5 w-full">
-      <div className="flex items-center gap-3">
+    <div className="flex justify-end items-center mt-3 sm:mt-5 w-full">
+      <div className="flex items-center gap-2 sm:gap-3">
 
         {/* Wishlist */}
 
@@ -126,8 +126,8 @@ export default function ProductActions({
             setLiked(!liked);
           }}
           className="
-          w-11
-          h-11
+          w-9 sm:w-11
+          h-9 sm:h-11
           rounded-full
           border
           border-gray-200
@@ -138,14 +138,14 @@ export default function ProductActions({
           transition-all
           duration-300
           hover:scale-110
+          cursor-pointer
           "
         >
           <FaHeart
-            className={
-              liked
-                ? "text-red-500"
-                : "text-gray-400"
-            }
+            className={`
+              text-xs sm:text-base
+              ${liked ? "text-red-500" : "text-gray-400"}
+            `}
           />
         </button>
 
@@ -157,14 +157,14 @@ export default function ProductActions({
             <div
               className="
               absolute
-              -top-11
+              -top-9 sm:-top-11
               left-1/2
               -translate-x-1/2
               bg-[#145A3B]
               text-white
-              text-xs
-              px-3
-              py-2
+              text-[10px] sm:text-xs
+              px-2.5 sm:px-3
+              py-1 sm:py-2
               rounded-full
               whitespace-nowrap
               shadow-lg
@@ -179,8 +179,8 @@ export default function ProductActions({
             <button
               onClick={addProduct}
               className="
-              w-11
-              h-11
+              w-9 sm:w-11
+              h-9 sm:h-11
               rounded-full
               bg-[#145A3B]
               text-white
@@ -191,9 +191,10 @@ export default function ProductActions({
               hover:scale-110
               transition-all
               duration-300
+              cursor-pointer
               "
             >
-              <FaShoppingCart />
+              <FaShoppingCart className="text-xs sm:text-base" />
             </button>
           ) : (
             <button
@@ -203,24 +204,26 @@ export default function ProductActions({
                 router.push("/cart");
               }}
               className="
-              px-4
-              py-2.5
+              px-2.5 sm:px-4
+              py-2 sm:py-2.5
               rounded-full
               bg-emerald-50
               text-[#145A3B]
               border
               border-[#145A3B]/20
-              text-xs
+              text-[9px] sm:text-xs
               font-bold
               flex
               items-center
-              gap-1.5
+              gap-1 sm:gap-1.5
               hover:bg-emerald-100
               transition-all
               duration-300
+              cursor-pointer
+              whitespace-nowrap
               "
             >
-              <FaShoppingCart className="text-[10px]" /> di Keranjang
+              <FaShoppingCart className="text-[9px] sm:text-[10px]" /> di Keranjang
             </button>
           )}
 

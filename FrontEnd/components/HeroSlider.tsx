@@ -57,7 +57,7 @@ export default function HeroSlider() {
       className="
       relative
       overflow-hidden
-      rounded-[40px]
+      rounded-[32px] sm:rounded-[40px]
       bg-[#145A3B]
       text-white
       "
@@ -66,6 +66,7 @@ export default function HeroSlider() {
       <div
         className="
         grid
+        grid-cols-1
         lg:grid-cols-2
         items-center
         "
@@ -73,20 +74,25 @@ export default function HeroSlider() {
 
         <div
           className="
-          p-14
+          px-6 py-10
+          sm:p-14
           lg:p-20
+          text-center
+          lg:text-left
           "
         >
 
           <span
             className="
             inline-block
-            bg-green-600
-            px-5
-            py-2
+            bg-white/10
+            backdrop-blur-sm
+            px-4
+            py-1.5
             rounded-full
-            text-sm
-            mb-6
+            text-xs sm:text-sm
+            mb-4 lg:mb-6
+            font-bold
             "
           >
 
@@ -96,10 +102,12 @@ export default function HeroSlider() {
 
           <h1
             className="
-            text-5xl
+            text-2xl
+            sm:text-4xl
             lg:text-6xl
-            font-bold
+            font-black
             leading-tight
+            tracking-tight
             "
           >
 
@@ -114,10 +122,15 @@ export default function HeroSlider() {
 
           <p
             className="
-            mt-8
-            text-lg
-            leading-8
-            text-green-100
+            mt-4 lg:mt-8
+            text-sm
+            sm:text-base
+            lg:text-lg
+            leading-relaxed
+            text-emerald-100/90
+            max-w-md
+            mx-auto
+            lg:mx-0
             "
           >
 
@@ -133,8 +146,10 @@ export default function HeroSlider() {
           <div
             className="
             flex
-            gap-4
-            mt-10
+            gap-3 sm:gap-4
+            mt-6 lg:mt-10
+            justify-center
+            lg:justify-start
             "
           >
 
@@ -146,11 +161,14 @@ export default function HeroSlider() {
                 className="
                 bg-white
                 text-[#145A3B]
-                px-8
-                py-4
-                rounded-2xl
-                font-semibold
-                hover:bg-green-50
+                px-5 sm:px-8
+                py-3 sm:py-4
+                rounded-xl sm:rounded-2xl
+                text-xs sm:text-base
+                font-extrabold
+                hover:bg-emerald-50
+                transition
+                cursor-pointer
                 "
               >
 
@@ -163,13 +181,15 @@ export default function HeroSlider() {
             <button
               className="
               border
-              border-white
-              px-8
-              py-4
-              rounded-2xl
-              hover:bg-white
-              hover:text-[#145A3B]
+              border-white/30
+              px-5 sm:px-8
+              py-3 sm:py-4
+              rounded-xl sm:rounded-2xl
+              text-xs sm:text-base
+              font-extrabold
+              hover:bg-white/10
               transition
+              cursor-pointer
               "
             >
 
@@ -186,7 +206,8 @@ export default function HeroSlider() {
           flex
           justify-center
           items-center
-          p-10
+          p-6 sm:p-10
+          pt-0 lg:pt-10
           "
         >
 
@@ -198,7 +219,10 @@ export default function HeroSlider() {
             alt=""
             className="
             w-full
-            max-w-xl
+            max-w-xs
+            sm:max-w-md
+            lg:max-w-xl
+            h-44 sm:h-64 lg:h-96
             object-contain
             "
           />
@@ -208,53 +232,65 @@ export default function HeroSlider() {
       </div>
 
       <button
-  onClick={prevSlide}
-  className="
-  absolute
-  left-3
-  top-1/2
-  -translate-y-1/2
-  text-[#22C55E]
-  hover:text-[#16A34A]
-  transition-all
-  duration-300
-  hover:scale-125
-  z-20
-  "
->
-
-  <FaChevronLeft className="text-6xl" />
-
-</button>
+        onClick={prevSlide}
+        className="
+        absolute
+        left-3 sm:left-4
+        top-1/2
+        -translate-y-1/2
+        w-8 h-8
+        sm:w-12 sm:h-12
+        rounded-full
+        bg-white/10
+        backdrop-blur-sm
+        text-white
+        hover:bg-white/20
+        flex
+        items-center
+        justify-center
+        transition-all
+        duration-300
+        z-20
+        cursor-pointer
+        "
+      >
+        <FaChevronLeft className="text-xs sm:text-base" />
+      </button>
 
       <button
-  onClick={nextSlide}
-  className="
-  absolute
-  right-3
-  top-1/2
-  -translate-y-1/2
-  text-[#22C55E]
-  hover:text-[#16A34A]
-  transition-all
-  duration-300
-  hover:scale-125
-  z-20
-  "
->
-
-  <FaChevronRight className="text-6xl" />
-
-</button>
+        onClick={nextSlide}
+        className="
+        absolute
+        right-3 sm:right-4
+        top-1/2
+        -translate-y-1/2
+        w-8 h-8
+        sm:w-12 sm:h-12
+        rounded-full
+        bg-white/10
+        backdrop-blur-sm
+        text-white
+        hover:bg-white/20
+        flex
+        items-center
+        justify-center
+        transition-all
+        duration-300
+        z-20
+        cursor-pointer
+        "
+      >
+        <FaChevronRight className="text-xs sm:text-base" />
+      </button>
 
       <div
         className="
         absolute
-        bottom-6
+        bottom-4 sm:bottom-6
         left-1/2
         -translate-x-1/2
         flex
-        gap-3
+        gap-2 sm:gap-3
         "
       >
 
@@ -274,22 +310,23 @@ export default function HeroSlider() {
 
                 className={`
 
-                  w-3
+                  w-2 sm:w-3
 
-                  h-3
+                  h-2 sm:h-3
 
                   rounded-full
 
-                  transition
+                  transition-all
+                  duration-300
 
                   ${
 
                     currentSlide ===
                     index
 
-                      ? "bg-white"
+                      ? "bg-white w-5 sm:w-6"
 
-                      : "bg-green-300"
+                      : "bg-white/40 hover:bg-white/60"
 
                   }
 

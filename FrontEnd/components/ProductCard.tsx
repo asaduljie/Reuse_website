@@ -62,12 +62,12 @@ export default function ProductCard({
         <div
           className="
           relative
-          h-72
+          h-40 sm:h-56 lg:h-72
           bg-[#F8F8F8]
           flex
           items-center
           justify-center
-          p-5
+          p-3 sm:p-5
           "
         >
 
@@ -87,22 +87,23 @@ export default function ProductCard({
           <button
             className="
             absolute
-            top-4
-            right-4
-            w-10
-            h-10
+            top-2 right-2 sm:top-4 sm:right-4
+            w-8 h-8 sm:w-10 sm:h-10
             rounded-full
-            bg-white
-            shadow
+            bg-white/80
+            backdrop-blur-sm
+            shadow-sm
             flex
             items-center
             justify-center
             hover:bg-red-50
+            transition
             "
           >
 
             <FaHeart
               className="
+              text-xs sm:text-sm
               text-gray-500
               hover:text-red-500
               "
@@ -114,18 +115,18 @@ export default function ProductCard({
 
         {/* CONTENT */}
 
-        <div className="p-5">
+        <div className="p-3 sm:p-5">
 
           <span
             className="
             inline-block
-            bg-green-100
-            text-green-700
-            px-3
-            py-1
+            bg-[#145A3B]/10
+            text-[#145A3B]
+            px-2 sm:px-3
+            py-0.5 sm:py-1
             rounded-full
-            text-xs
-            font-semibold
+            text-[10px] sm:text-xs
+            font-bold
             "
           >
 
@@ -135,12 +136,12 @@ export default function ProductCard({
 
           <h2
             className="
-            mt-4
-            font-bold
-            text-xl
+            mt-2 lg:mt-4
+            font-extrabold
+            text-xs sm:text-sm lg:text-lg
             text-gray-800
             line-clamp-2
-            min-h-[56px]
+            min-h-[32px] sm:min-h-[40px] lg:min-h-[56px]
             "
           >
 
@@ -150,11 +151,12 @@ export default function ProductCard({
 
           <p
             className="
-            text-sm
-            text-gray-500
-            mt-2
+            text-[10px] sm:text-xs lg:text-sm
+            text-gray-400
+            mt-1 lg:mt-2
             line-clamp-2
-            h-10
+            h-8 lg:h-10
+            font-semibold
             "
           >
 
@@ -162,12 +164,12 @@ export default function ProductCard({
 
           </p>
 
-          <div className="mt-4">
+          <div className="mt-2 lg:mt-4">
 
             <span
               className="
-              text-2xl
-              font-bold
+              text-sm sm:text-base lg:text-2xl
+              font-black
               text-[#145A3B]
               "
             >
@@ -181,9 +183,9 @@ export default function ProductCard({
 
           </div>
 
-<ProductActions
-  product={product}
-/>
+          <ProductActions
+            product={product}
+          />
 
         </div>
 

@@ -238,24 +238,24 @@ export default function HomePage() {
               <div className="flex justify-between items-center mb-10">
                 <div>
                   <p className="text-[#145A3B] font-semibold uppercase tracking-widest">Kategori Pilihan</p>
-                  <h2 className="text-4xl font-bold text-gray-900 mt-2">Featured Categories</h2>
+                  <h2 className="text-xl sm:text-4xl font-black text-gray-900 mt-2">Featured Categories</h2>
                 </div>
-                <Link href="/categories" className="text-[#145A3B] font-semibold hover:underline">
+                <Link href="/categories" className="text-[#145A3B] font-bold text-sm hover:underline">
                   View All →
                 </Link>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 {categories.map((cat) => (
                   <Link
                     key={cat.id}
                     href={`/products?category=${cat.id}`}
-                    className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center hover:scale-105 hover:shadow-md transition duration-300"
+                    className="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-gray-100 text-center hover:scale-105 hover:shadow-md transition duration-300"
                   >
-                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto text-[#145A3B] font-bold text-lg mb-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto text-[#145A3B] font-black text-sm sm:text-lg mb-3 sm:mb-4">
                       {cat.name.charAt(0)}
                     </div>
-                    <h4 className="font-bold text-gray-800 text-sm truncate">{cat.name}</h4>
-                    <p className="text-xs text-gray-400 mt-1">{cat.description || "Lihat produk pilihan"}</p>
+                    <h4 className="font-bold text-gray-800 text-xs sm:text-sm truncate">{cat.name}</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 mt-1 line-clamp-1">{cat.description || "Lihat produk pilihan"}</p>
                   </Link>
                 ))}
               </div>
@@ -267,40 +267,40 @@ export default function HomePage() {
             <section className="mt-20">
               <div className="flex justify-between items-center mb-10">
                 <div>
-                  <p className="text-[#145A3B] font-semibold uppercase tracking-widest">New Arrival</p>
-                  <h2 className="text-4xl font-bold text-gray-900 mt-2">Latest Collection</h2>
+                  <p className="text-[#145A3B] font-semibold uppercase tracking-widest text-xs">New Arrival</p>
+                  <h2 className="text-xl sm:text-4xl font-black text-gray-900 mt-2">Latest Collection</h2>
                 </div>
-                <Link href="/products" className="text-[#145A3B] font-semibold hover:underline">
+                <Link href="/products" className="text-[#145A3B] font-bold text-sm hover:underline">
                   View All →
                 </Link>
               </div>
               
               {loadingLatest ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                   {[...Array(4)].map((_, index) => (
                     <div key={index} className="bg-white rounded-3xl overflow-hidden animate-pulse shadow-sm">
-                      <div className="h-72 bg-gray-200" />
-                      <div className="p-6">
-                        <div className="h-5 w-24 rounded bg-gray-200 mb-4" />
-                        <div className="h-6 rounded bg-gray-200 mb-3" />
-                        <div className="h-4 rounded bg-gray-200 mb-2" />
-                        <div className="h-4 w-2/3 rounded bg-gray-200 mb-5" />
-                        <div className="h-8 w-32 rounded bg-gray-200" />
+                      <div className="h-40 sm:h-56 lg:h-72 bg-gray-200" />
+                      <div className="p-4 sm:p-6">
+                        <div className="h-4 w-16 rounded bg-gray-200 mb-4" />
+                        <div className="h-5 rounded bg-gray-200 mb-3" />
+                        <div className="h-3 rounded bg-gray-200 mb-2" />
+                        <div className="h-3 w-2/3 rounded bg-gray-200 mb-5" />
+                        <div className="h-8 w-24 rounded bg-gray-200" />
                       </div>
                     </div>
                   ))}
                 </div>
               ) : errorLatest ? (
-                <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-8 text-center">
+                <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-8 text-center text-sm">
                   {errorLatest}
                 </div>
               ) : latestProducts.length === 0 ? (
                 <div className="bg-white rounded-3xl shadow-sm p-16 text-center">
-                  <h3 className="text-2xl font-semibold">Belum Ada Produk</h3>
-                  <p className="text-gray-500 mt-3">Produk terbaru akan muncul di sini setelah seller mengunggah produk.</p>
+                  <h3 className="text-xl font-bold">Belum Ada Produk</h3>
+                  <p className="text-gray-500 text-sm mt-3">Produk terbaru akan muncul di sini setelah seller mengunggah produk.</p>
                 </div>
               ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                   {latestProducts.slice(0, 4).map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -342,40 +342,40 @@ export default function HomePage() {
             <section className="mt-24">
               <div className="flex justify-between items-center mb-10">
                 <div>
-                  <p className="text-[#145A3B] font-semibold uppercase tracking-widest">Featured</p>
-                  <h2 className="text-4xl font-bold text-gray-900 mt-2">Popular Products</h2>
+                  <p className="text-[#145A3B] font-semibold uppercase tracking-widest text-xs">Featured</p>
+                  <h2 className="text-xl sm:text-4xl font-black text-gray-900 mt-2">Popular Products</h2>
                 </div>
-                <Link href="/products" className="text-[#145A3B] font-semibold hover:underline">
+                <Link href="/products" className="text-[#145A3B] font-bold text-sm hover:underline">
                   View All →
                 </Link>
               </div>
               
               {loadingFeatured ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                   {[...Array(4)].map((_, index) => (
                     <div key={index} className="bg-white rounded-3xl overflow-hidden animate-pulse shadow-sm">
-                      <div className="h-72 bg-gray-200" />
-                      <div className="p-6">
-                        <div className="h-5 w-24 rounded bg-gray-200 mb-4" />
-                        <div className="h-6 rounded bg-gray-200 mb-3" />
-                        <div className="h-4 rounded bg-gray-200 mb-2" />
-                        <div className="h-4 w-2/3 rounded bg-gray-200 mb-5" />
-                        <div className="h-8 w-32 rounded bg-gray-200" />
+                      <div className="h-40 sm:h-56 lg:h-72 bg-gray-200" />
+                      <div className="p-4 sm:p-6">
+                        <div className="h-4 w-16 rounded bg-gray-200 mb-4" />
+                        <div className="h-5 rounded bg-gray-200 mb-3" />
+                        <div className="h-3 rounded bg-gray-200 mb-2" />
+                        <div className="h-3 w-2/3 rounded bg-gray-200 mb-5" />
+                        <div className="h-8 w-24 rounded bg-gray-200" />
                       </div>
                     </div>
                   ))}
                 </div>
               ) : errorFeatured ? (
-                <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-8 text-center">
+                <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-8 text-center text-sm">
                   {errorFeatured}
                 </div>
               ) : featuredProducts.length === 0 ? (
                 <div className="bg-white rounded-3xl shadow-sm p-16 text-center">
-                  <h3 className="text-2xl font-semibold">Belum Ada Produk</h3>
-                  <p className="text-gray-500 mt-3">Produk populer akan muncul di sini setelah ada riwayat pembelian/favorit.</p>
+                  <h3 className="text-xl font-bold">Belum Ada Produk</h3>
+                  <p className="text-gray-500 text-sm mt-3">Produk populer akan muncul di sini setelah ada riwayat pembelian/favorit.</p>
                 </div>
               ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                   {featuredProducts.slice(0, 4).map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -389,11 +389,11 @@ export default function HomePage() {
             <section className="mt-28">
               <div className="flex justify-between items-center mb-10">
                 <div>
-                  <p className="text-[#145A3B] font-semibold uppercase tracking-widest">Recommended for You</p>
-                  <h2 className="text-4xl font-bold text-gray-900 mt-2">Disesuaikan Untuk Anda</h2>
+                  <p className="text-[#145A3B] font-semibold uppercase tracking-widest text-xs">Recommended for You</p>
+                  <h2 className="text-xl sm:text-4xl font-black text-gray-900 mt-2">Disesuaikan Untuk Anda</h2>
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {recommended.slice(0, 4).map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
