@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import Navbar from "../../../components/navbar";
 import Footer from "../../../components/footer";
@@ -14,6 +14,8 @@ import {
   Product
 } from "../../../services/productService";
 import { getSimilarProducts } from "../../../services/recommendationService";
+import { getUser } from "../../../utils/auth";
+import { addToWishlist, removeFromWishlist, isInWishlist } from "../../../services/wishlistService";
 
 import {
   FaHeart,
@@ -23,8 +25,9 @@ import {
 } from "react-icons/fa";
 
 export default function ProductDetailPage() {
-
   const params = useParams();
+  const router = useRouter();
+  const [favorite, setFavorite] = useState(false);
 
   const id =
     Array.isArray(params.id)
@@ -62,7 +65,39 @@ export default function ProductDetailPage() {
       setSimilarProducts(recs);
     };
     fetchSimilar();
+
+    // Check wishlist status
+    const user = getUser();
+    if (user) {
+      setFavorite(isInWishlist(user.id, product.id));
+    }
   }, [product]);
+
+  const handleWishlist = () => {
+    if (!product) return;
+    const user = getUser();
+    if (!user) {
+      alert("Silakan login terlebih dahulu untuk menggunakan fitur Wishlist.");
+      router.push("/login");
+      return;
+    }
+
+    if (favorite) {
+      removeFromWishlist(user.id, product.id);
+      setFavorite(false);
+    } else {
+      addToWishlist({
+        userId: user.id,
+        productId: product.id,
+        productName: product.name,
+        productImage: product.imageUrl,
+        price: product.price,
+        sellerId: 3,
+        sellerName: "ReUse Store",
+      });
+      setFavorite(true);
+    }
+  };
 
   const loadProduct = async () => {
 
@@ -559,9 +594,9 @@ Terima kasih.`;
               >
 
                 <button
-                  className="
+                  onClick={handleWishlist}
+                  className={`
                   border
-                  border-gray-200
                   rounded-2xl
                   py-3 sm:py-4
                   flex
@@ -571,16 +606,19 @@ Terima kasih.`;
                   gap-1 sm:gap-3
                   text-[10px] sm:text-sm lg:text-base
                   font-extrabold
-                  text-gray-600
-                  hover:bg-red-50 hover:text-red-500
                   transition
                   cursor-pointer
-                  "
+                  ${
+                    favorite
+                      ? "bg-red-50 text-red-500 border-red-200 hover:bg-red-100"
+                      : "border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500"
+                  }
+                  `}
                 >
 
-                  <FaHeart className="text-xs sm:text-base shrink-0" />
+                  <FaHeart className={`text-xs sm:text-base shrink-0 ${favorite ? "text-red-500" : ""}`} />
 
-                  <span>Wishlist</span>
+                  <span>{favorite ? "Di Wishlist" : "Wishlist"}</span>
 
                 </button>
 

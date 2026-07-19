@@ -1,40 +1,68 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import ProductActions from "./products/productActions";
+import { getUser } from "../utils/auth";
+import { addToWishlist, removeFromWishlist, isInWishlist } from "../services/wishlistService";
 
 interface Product {
-
   id: number;
-
   name: string;
-
   description: string;
-
   price: number;
-
   stock: number;
-
   category: string;
-
   image: string;
-
   imageUrl: string;
-
 }
 
 interface ProductCardProps {
-
   product: Product;
-
 }
 
 export default function ProductCard({
-
   product,
-
 }: ProductCardProps) {
+  const router = useRouter();
+  const [favorite, setFavorite] = useState(false);
+
+  useEffect(() => {
+    const user = getUser();
+    if (user) {
+      setFavorite(isInWishlist(user.id, product.id));
+    }
+  }, [product.id]);
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const user = getUser();
+    if (!user) {
+      alert("Silakan login terlebih dahulu untuk menggunakan fitur Wishlist.");
+      router.push("/login");
+      return;
+    }
+
+    if (favorite) {
+      removeFromWishlist(user.id, product.id);
+      setFavorite(false);
+    } else {
+      addToWishlist({
+        userId: user.id,
+        productId: product.id,
+        productName: product.name,
+        productImage: product.imageUrl,
+        price: product.price,
+        sellerId: 3,
+        sellerName: "ReUse Store",
+      });
+      setFavorite(true);
+    }
+  };
 
   return (
 
@@ -85,28 +113,32 @@ export default function ProductCard({
           />
 
           <button
+            onClick={handleWishlist}
             className="
             absolute
             top-2 right-2 sm:top-4 sm:right-4
             w-8 h-8 sm:w-10 sm:h-10
             rounded-full
-            bg-white/80
+            bg-white/90
             backdrop-blur-sm
-            shadow-sm
+            shadow-md
             flex
             items-center
             justify-center
             hover:bg-red-50
             transition
+            cursor-pointer
+            z-20
             "
           >
 
             <FaHeart
-              className="
+              className={`
               text-xs sm:text-sm
-              text-gray-500
-              hover:text-red-500
-              "
+              transition-colors
+              duration-300
+              ${favorite ? "text-red-500" : "text-gray-400 hover:text-red-500"}
+              `}
             />
 
           </button>
