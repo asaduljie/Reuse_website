@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { getCurrentUser } from "../utils/roleGuard";
 
@@ -20,6 +20,7 @@ import {
 export default function Navbar() {
 
   const pathname = usePathname();
+  const router = useRouter();
 
   const [menuOpen, setMenuOpen] =
     useState(false);
@@ -168,6 +169,12 @@ export default function Navbar() {
               onChange={(e)=>
                 setKeyword(e.target.value)
               }
+
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  router.push(`/products?search=${encodeURIComponent(keyword)}`);
+                }
+              }}
 
               placeholder="Search product..."
 
@@ -532,135 +539,170 @@ export default function Navbar() {
           <div
             className="
             lg:hidden
-            bg-white
+            bg-[#0e402a]
             border-t
+            border-emerald-800/80
+            shadow-2xl
             "
           >
 
-            <div className="p-5">
+            <div className="px-6 py-6 space-y-4">
 
-              <div
-                className="
-                relative
-                mb-5
-                "
-              >
-
-                <FaSearch
-                  className="
-                  absolute
-                  left-4
-                  top-1/2
-                  -translate-y-1/2
-                  text-gray-400
-                  "
-                />
-
+              {/* SEARCH */}
+              <div className="relative mb-6">
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-200/50 text-xs" />
                 <input
-
-                  placeholder="Search product..."
-
-                  className="
-                  w-full
-                  border
-                  rounded-full
-                  pl-12
-                  pr-4
-                  py-3
-                  "
-
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setMenuOpen(false);
+                      router.push(`/products?search=${encodeURIComponent(keyword)}`);
+                    }
+                  }}
+                  placeholder="Cari produk..."
+                  className="w-full bg-white/10 border border-emerald-800/60 rounded-full pl-11 pr-4 py-2.5 text-xs text-white placeholder-emerald-200/50 outline-none focus:bg-white/20 focus:border-emerald-400 transition"
                 />
-
               </div>
 
+              {/* MENU LINKS */}
               {
 
-                menus.map((menu,index)=>(
+                menus.map((menu,index)=>{
+                  const active = pathname === menu.href;
+                  return (
 
-                  <Link
+                    <Link
 
-                    key={index}
+                      key={index}
 
-                    href={menu.href}
+                      href={menu.href}
 
-                    onClick={()=>
-                      setMenuOpen(false)
-                    }
+                      onClick={()=>
+                        setMenuOpen(false)
+                      }
 
-                    className="
-                    block
-                    py-4
-                    border-b
-                    "
+                      className={`
+                      flex
+                      items-center
+                      justify-between
+                      px-4
+                      py-3
+                      rounded-2xl
+                      text-sm
+                      font-extrabold
+                      transition-all
+                      duration-200
+                      ${
+                        active
+                          ? "bg-white text-[#145A3B] shadow-md"
+                          : "text-emerald-100 hover:bg-white/10 hover:text-white"
+                      }
+                      `}
 
-                  >
+                    >
 
-                    {menu.name}
+                      <span>{menu.name}</span>
+                      <span className="text-[10px] opacity-60">→</span>
 
-                  </Link>
+                    </Link>
 
-                ))
+                  );
+                })
 
               }
 
               <Link
                 href="/wishlist"
-                className="
-                block
-                py-4
-                border-b
-                "
+                onClick={() => setMenuOpen(false)}
+                className={`
+                flex
+                items-center
+                justify-between
+                px-4
+                py-3
+                rounded-2xl
+                text-sm
+                font-extrabold
+                transition-all
+                duration-200
+                ${
+                  pathname === "/wishlist"
+                    ? "bg-white text-[#145A3B] shadow-md"
+                    : "text-emerald-100 hover:bg-white/10 hover:text-white"
+                }
+                `}
               >
-
-                Wishlist
-
+                <div className="flex items-center gap-2">
+                  <FaHeart className="text-red-400 text-xs shrink-0" />
+                  <span>Wishlist</span>
+                </div>
+                <span className="text-[10px] opacity-60">→</span>
               </Link>
 
               <Link
                 href="/cart"
-                className="
-                block
-                py-4
-                border-b
-                "
+                onClick={() => setMenuOpen(false)}
+                className={`
+                flex
+                items-center
+                justify-between
+                px-4
+                py-3
+                rounded-2xl
+                text-sm
+                font-extrabold
+                transition-all
+                duration-200
+                ${
+                  pathname === "/cart"
+                    ? "bg-white text-[#145A3B] shadow-md"
+                    : "text-emerald-100 hover:bg-white/10 hover:text-white"
+                }
+                `}
               >
-
-                Cart ({cartCount})
-
+                <div className="flex items-center gap-2">
+                  <FaShoppingCart className="text-emerald-300 text-xs shrink-0" />
+                  <span>Keranjang</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {cartCount > 0 && (
+                    <span className="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                  <span className="text-[10px] opacity-60">→</span>
+                </div>
               </Link>
 
+              {/* AUTH ACTIONS */}
               {
 
                 !isLogin && (
 
-                  <>
+                  <div className="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-emerald-800/40">
 
                     <Link
                       href="/login"
-                      className="
-                      block
-                      py-4
-                      border-b
-                      "
+                      onClick={() => setMenuOpen(false)}
+                      className="w-full"
                     >
-
-                      Login
-
+                      <button className="w-full bg-white/10 hover:bg-white/20 text-white text-xs font-black py-3 rounded-xl border border-white/10 transition cursor-pointer">
+                        Masuk
+                      </button>
                     </Link>
 
                     <Link
                       href="/register"
-                      className="
-                      block
-                      py-4
-                      "
+                      onClick={() => setMenuOpen(false)}
+                      className="w-full"
                     >
-
-                      Register
-
+                      <button className="w-full bg-white hover:bg-emerald-50 text-[#145A3B] text-xs font-black py-3 rounded-xl transition cursor-pointer">
+                        Daftar
+                      </button>
                     </Link>
 
-                  </>
+                  </div>
 
                 )
 

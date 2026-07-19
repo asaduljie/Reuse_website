@@ -553,7 +553,7 @@ Terima kasih.`;
                 className="
                 grid
                 grid-cols-3
-                gap-4
+                gap-2 sm:gap-4
                 mt-12
                 "
               >
@@ -561,20 +561,26 @@ Terima kasih.`;
                 <button
                   className="
                   border
+                  border-gray-200
                   rounded-2xl
-                  py-4
+                  py-3 sm:py-4
                   flex
+                  flex-col sm:flex-row
                   items-center
                   justify-center
-                  gap-3
-                  hover:bg-red-50
+                  gap-1 sm:gap-3
+                  text-[10px] sm:text-sm lg:text-base
+                  font-extrabold
+                  text-gray-600
+                  hover:bg-red-50 hover:text-red-500
                   transition
+                  cursor-pointer
                   "
                 >
 
-                  <FaHeart />
+                  <FaHeart className="text-xs sm:text-base shrink-0" />
 
-                  Wishlist
+                  <span>Wishlist</span>
 
                 </button>
 
@@ -584,41 +590,49 @@ Terima kasih.`;
                   bg-[#145A3B]
                   text-white
                   rounded-2xl
-                  py-4
+                  py-3 sm:py-4
                   flex
+                  flex-col sm:flex-row
                   items-center
                   justify-center
-                  gap-3
-                  hover:bg-green-900
+                  gap-1 sm:gap-3
+                  text-[10px] sm:text-sm lg:text-base
+                  font-extrabold
+                  hover:bg-emerald-900
                   transition
+                  cursor-pointer
                   "
                 >
 
-                  <FaShoppingCart />
+                  <FaShoppingCart className="text-xs sm:text-base shrink-0" />
 
-                  Keranjang
+                  <span>Keranjang</span>
 
                 </button>
 
                 <button
                   onClick={buyViaWhatsapp}
                   className="
-                  bg-green-500
+                  bg-[#25D366]
                   text-white
                   rounded-2xl
-                  py-4
+                  py-3 sm:py-4
                   flex
+                  flex-col sm:flex-row
                   items-center
                   justify-center
-                  gap-3
+                  gap-1 sm:gap-3
+                  text-[10px] sm:text-sm lg:text-base
+                  font-extrabold
                   hover:bg-green-600
                   transition
+                  cursor-pointer
                   "
                 >
 
-                  <FaWhatsapp />
+                  <FaWhatsapp className="text-xs sm:text-base shrink-0" />
 
-                  WhatsApp
+                  <span>WhatsApp</span>
 
                 </button>
 

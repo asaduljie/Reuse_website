@@ -83,7 +83,7 @@ export default function ChatWidget({ onClose }: Props) {
   };
 
   return (
-    <div className="bg-white w-96 h-[500px] rounded-[32px] border border-gray-100 shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+    <div className="bg-white w-[calc(100vw-2.5rem)] sm:w-[380px] h-[430px] sm:h-[500px] rounded-[24px] sm:rounded-[32px] border border-gray-100 shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
       {/* Header */}
       <div className="bg-[#145A3B] text-white px-6 py-4 flex items-center justify-between shadow">
         <div className="flex items-center gap-3">
