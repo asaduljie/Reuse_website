@@ -371,650 +371,199 @@ Belanja Sekarang
 
 :
 
-<div
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
-className="
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
 
-grid
+            {cart.map((item) => (
 
-lg:grid-cols-3
+              <div
+                key={item.id}
+                className="bg-white rounded-3xl shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 border border-gray-100"
+              >
 
-gap-10
+                <div className="w-full sm:w-32 lg:w-40 h-48 sm:h-32 lg:h-40 shrink-0 rounded-2xl overflow-hidden bg-gray-50 flex items-center justify-center">
 
-"
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
 
->
+                </div>
 
-<div
+                <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
 
-className="
+                  <div>
 
-lg:col-span-2
+                    <span className="inline-block bg-[#145A3B]/10 text-[#145A3B] text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full">
 
-space-y-6
+                      {item.category}
 
-"
+                    </span>
 
->
+                    <h2 className="text-base sm:text-xl font-extrabold mt-2 text-gray-800 line-clamp-2">
 
-{
+                      {item.name}
 
-cart.map(
+                    </h2>
 
-item=>(
+                  </div>
 
-<div
+                  <p className="mt-2 text-lg sm:text-2xl font-black text-[#145A3B]">
 
-key={item.id}
+                    Rp {Number(item.price).toLocaleString("id-ID")}
 
-className="
+                  </p>
 
-bg-white
+                </div>
 
-rounded-3xl
+                <div className="flex sm:flex-col justify-between items-center sm:items-end gap-4 sm:gap-0 mt-3 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100/80 shrink-0">
 
-shadow-sm
+                  <button
+                    onClick={() => remove(item.id)}
+                    className="p-2.5 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 hover:text-red-700 transition cursor-pointer"
+                  >
 
-p-6
+                    <FaTrashAlt className="text-base" />
 
-flex
+                  </button>
 
-gap-6
+                  <div className="text-right">
 
-"
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Subtotal</p>
 
->
+                    <h3 className="text-base sm:text-xl font-black text-gray-800 mt-0.5">
 
-<img
+                      Rp {(item.price * item.qty).toLocaleString("id-ID")}
 
-src={item.imageUrl}
+                    </h3>
 
-alt={item.name}
+                  </div>
 
-className="
+                </div>
 
-w-40
+              </div>
 
-h-40
+            ))}
 
-rounded-2xl
+          </div>
 
-object-cover
+          <div className="bg-white rounded-3xl shadow-sm p-5 sm:p-8 h-fit lg:sticky lg:top-28 border border-gray-100">
 
-"
+            <p className="uppercase tracking-widest text-[#145A3B] font-extrabold text-xs">
 
-/>
+              Order Summary
 
-<div
+            </p>
 
-className="
+            <h2 className="text-xl sm:text-2xl font-black text-gray-800 mt-2 mb-6">
 
-flex-1
+              Ringkasan Belanja
 
-"
+            </h2>
 
->
+            <div className="space-y-4">
 
-<p
+              <div className="flex justify-between items-center text-sm font-semibold text-gray-500">
 
-className="
+                <span>Total Item</span>
 
-text-sm
+                <b className="text-gray-800 font-extrabold">{totalItem}</b>
 
-text-[#145A3B]
+              </div>
 
-font-semibold
+              <div className="flex justify-between items-center text-sm font-semibold text-gray-500">
 
-"
+                <span>Subtotal</span>
 
->
+                <b className="text-gray-800 font-extrabold">
 
-{item.category}
+                  Rp {totalPrice.toLocaleString("id-ID")}
 
-</p>
+                </b>
 
-<h2
+              </div>
 
-className="
+              <div className="flex justify-between items-center text-sm font-semibold text-gray-500">
 
-text-2xl
+                <span>Ongkir</span>
 
-font-bold
+                <b className="text-green-600 font-black uppercase text-xs">Gratis</b>
 
-mt-2
+              </div>
 
-"
+              <hr className="border-gray-100 my-4" />
 
->
+              <div className="flex justify-between items-center text-lg sm:text-xl font-black">
 
-{item.name}
+                <span className="text-gray-800">Total</span>
 
-</h2>
+                <span className="text-[#145A3B]">
 
-<p
+                  Rp {totalPrice.toLocaleString("id-ID")}
 
-className="
+                </span>
 
-mt-3
+              </div>
 
-text-3xl
+            </div>
 
-font-bold
+            <button
+              onClick={handleCheckout}
+              className="w-full mt-6 bg-[#145A3B] text-white py-3.5 rounded-2xl font-extrabold text-sm hover:bg-emerald-900 transition cursor-pointer shadow-md shadow-emerald-950/10"
+            >
 
-text-[#145A3B]
+              Checkout
 
-"
+            </button>
 
->
+            <button
+              onClick={() => {
+                localStorage.removeItem("cart");
+                loadCart();
+              }}
+              className="w-full mt-3 border border-red-200 text-red-500 py-3.5 rounded-2xl font-extrabold text-sm hover:bg-red-50 transition cursor-pointer"
+            >
 
-Rp {
+              Kosongkan Keranjang
 
-Number(
+            </button>
 
-item.price
+            <div className="mt-6 bg-[#F7F8FA] rounded-2xl p-4 sm:p-5">
 
-).toLocaleString(
+              <h3 className="font-extrabold text-xs text-gray-700 uppercase tracking-wider mb-3">
 
-"id-ID"
+                Informasi
 
-)
+              </h3>
 
-}
+              <ul className="text-xs text-gray-400 font-semibold space-y-2.5 leading-relaxed">
 
-</p>
+                <li>• Produk akan diproses setelah checkout.</li>
 
-</div>
+                <li>• Pastikan jumlah produk sudah benar.</li>
 
-<div
+                <li>• Pembayaran dilakukan setelah konfirmasi penjual.</li>
 
-className="
+                <li>• Checkout akan diarahkan ke WhatsApp.</li>
 
-flex
+              </ul>
 
-flex-col
+            </div>
 
-justify-between
+          </div>
 
-items-end
+        </div>
 
-"
-
->
-
-<button
-
-onClick={()=>remove(
-
-item.id
-
-)}
-
-className="
-p-3
-bg-red-50
-text-red-500
-rounded-2xl
-hover:bg-red-100
-hover:text-red-700
-hover:scale-105
-active:scale-95
-transition-all
-duration-300
-flex
-items-center
-justify-center
-shadow-sm
-border
-border-red-100/50
-cursor-pointer
-"
-
->
-
-<FaTrashAlt className="text-xl" />
-
-</button>
-
-<div
-
-className="
-
-text-right
-
-"
-
->
-
-<p
-
-className="
-
-text-gray-500
-
-"
-
->
-
-Subtotal
-
-</p>
-
-<h3
-
-className="
-
-text-2xl
-
-font-bold
-
-"
-
->
-
-Rp {
-
-(
-
-item.price*
-
-item.qty
-
-).toLocaleString(
-
-"id-ID"
-
-)
-
-}
-
-</h3>
-
-</div>
-
-</div>
-
-</div>
-
-)
-
-)
-
-}
-
-</div>
-
-<div
-
-className="
-
-bg-white
-
-rounded-3xl
-
-shadow-sm
-
-p-8
-
-h-fit
-
-sticky
-
-top-28
-
-"
-
->
-
-<p
-
-className="
-
-uppercase
-
-tracking-widest
-
-text-[#145A3B]
-
-font-semibold
-
-"
-
->
-
-Order Summary
-
-</p>
-
-<h2
-
-className="
-
-text-3xl
-
-font-bold
-
-mt-3
-
-mb-8
-
-"
-
->
-
-Ringkasan Belanja
-
-</h2>
-
-<div
-
-className="
-
-space-y-5
-
-"
-
->
-
-<div
-
-className="
-
-flex
-
-justify-between
-
-"
-
->
-
-<span>
-
-Total Item
-
-</span>
-
-<b>
-
-{totalItem}
-
-</b>
-
-</div>
-
-<div
-
-className="
-
-flex
-
-justify-between
-
-"
-
->
-
-<span>
-
-Subtotal
-
-</span>
-
-<b>
-
-Rp {
-
-totalPrice.toLocaleString(
-
-"id-ID"
-
-)
-
-}
-
-</b>
-
-</div>
-
-<div
-
-className="
-
-flex
-
-justify-between
-
-"
-
->
-
-<span>
-
-Ongkir
-
-</span>
-
-<b
-
-className="
-
-text-green-600
-
-"
-
->
-
-Gratis
-
-</b>
-
-</div>
-
-<hr/>
-
-<div
-
-className="
-
-flex
-
-justify-between
-
-text-2xl
-
-font-bold
-
-"
-
->
-
-<span>
-
-Total
-
-</span>
-
-<span
-
-className="
-
-text-[#145A3B]
-
-"
-
->
-
-Rp {
-
-totalPrice.toLocaleString(
-
-"id-ID"
-
-)
-
-}
-
-</span>
-
-</div>
-
-</div>
-
-<button
-
-onClick={handleCheckout}
-
-className="
-
-w-full
-
-mt-10
-
-bg-[#145A3B]
-
-text-white
-
-py-4
-
-rounded-2xl
-
-font-semibold
-
-hover:bg-green-900
-
-transition
-
-"
-
->
-
-Checkout
-
-</button>
-
-<button
-
-onClick={()=>{
-
-localStorage.removeItem(
-
-"cart"
-
-);
-
-loadCart();
-
-}}
-
-className="
-
-w-full
-
-mt-4
-
-border
-
-border-red-400
-
-text-red-500
-
-py-4
-
-rounded-2xl
-
-hover:bg-red-50
-
-transition
-
-"
-
->
-
-Kosongkan Keranjang
-
-</button>
-
-<div
-
-className="
-
-mt-8
-
-bg-[#F5F7F8]
-
-rounded-2xl
-
-p-5
-
-"
-
->
-
-<h3
-
-className="
-
-font-semibold
-
-mb-3
-
-"
-
->
-
-Informasi
-
-</h3>
-
-<ul
-
-className="
-
-text-sm
-
-text-gray-500
-
-space-y-2
-
-leading-7
-
-"
-
->
-
-<li>
-
-• Produk akan diproses setelah checkout.
-
-</li>
-
-<li>
-
-• Pastikan jumlah produk sudah benar.
-
-</li>
-
-<li>
-
-• Pembayaran dilakukan setelah konfirmasi penjual.
-
-</li>
-
-<li>
-
-• Checkout akan diarahkan ke WhatsApp.
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
+      }
 
       {recommended.length > 0 && (
         <div className="mt-20 border-t border-gray-100 pt-16">
-          <h3 className="text-2xl font-black text-gray-800 mb-8">AI Recommendation: Frequently Bought Together</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <h3 className="text-xl sm:text-2xl font-black text-gray-800 mb-8">
+            AI Recommendation: Frequently Bought Together
+          </h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {recommended.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -1022,17 +571,14 @@ leading-7
         </div>
       )}
 
-</div>
+    </div>
 
-}
-        </div>
+    <Footer />
 
-        <Footer />
+  </main>
 
-      </main>
+</>
 
-    </>
-
-  );
+);
 
 }
