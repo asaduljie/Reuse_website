@@ -725,15 +725,17 @@ export default function ProductsPage() {
               bg-gradient-to-r
               from-[#145A3B]
               to-[#2E8B57]
-              rounded-[40px]
+              rounded-[32px] sm:rounded-[40px]
               text-white
               overflow-hidden
+              shadow-sm
               "
             >
 
               <div
                 className="
                 grid
+                grid-cols-1
                 lg:grid-cols-2
                 items-center
                 "
@@ -741,7 +743,11 @@ export default function ProductsPage() {
 
                 <div
                   className="
-                  p-14
+                  px-6 py-10
+                  sm:p-14
+                  lg:p-20
+                  text-center
+                  lg:text-left
                   "
                 >
 
@@ -750,6 +756,8 @@ export default function ProductsPage() {
                     uppercase
                     tracking-[4px]
                     text-green-200
+                    text-xs
+                    font-extrabold
                     "
                   >
 
@@ -759,10 +767,13 @@ export default function ProductsPage() {
 
                   <h2
                     className="
-                    text-5xl
-                    font-bold
-                    mt-5
+                    text-2xl
+                    sm:text-4xl
+                    lg:text-5xl
+                    font-black
+                    mt-3 lg:mt-5
                     leading-tight
+                    tracking-tight
                     "
                   >
 
@@ -773,9 +784,14 @@ export default function ProductsPage() {
 
                   <p
                     className="
-                    mt-7
-                    text-green-100
-                    leading-8
+                    mt-4 lg:mt-7
+                    text-sm
+                    sm:text-base
+                    text-emerald-100/90
+                    leading-relaxed
+                    max-w-md
+                    mx-auto
+                    lg:mx-0
                     "
                   >
 
@@ -789,8 +805,10 @@ export default function ProductsPage() {
                   <div
                     className="
                     flex
-                    gap-5
-                    mt-10
+                    gap-3 sm:gap-4
+                    mt-6 lg:mt-10
+                    justify-center
+                    lg:justify-start
                     "
                   >
 
@@ -802,12 +820,14 @@ export default function ProductsPage() {
                         className="
                         bg-white
                         text-[#145A3B]
-                        px-8
-                        py-4
-                        rounded-2xl
-                        font-semibold
+                        px-5 sm:px-8
+                        py-3 sm:py-4
+                        rounded-xl sm:rounded-2xl
+                        text-xs sm:text-base
+                        font-extrabold
                         hover:bg-gray-100
                         transition
+                        cursor-pointer
                         "
                       >
 
@@ -824,13 +844,15 @@ export default function ProductsPage() {
                       <button
                         className="
                         border
-                        border-white
-                        px-8
-                        py-4
-                        rounded-2xl
-                        hover:bg-white
-                        hover:text-[#145A3B]
+                        border-white/30
+                        px-5 sm:px-8
+                        py-3 sm:py-4
+                        rounded-xl sm:rounded-2xl
+                        text-xs sm:text-base
+                        font-extrabold
+                        hover:bg-white/10
                         transition
+                        cursor-pointer
                         "
                       >
 
@@ -849,7 +871,8 @@ export default function ProductsPage() {
                   flex
                   justify-center
                   items-center
-                  p-10
+                  p-6 sm:p-10
+                  pt-0 lg:pt-10
                   "
                 >
 
@@ -858,7 +881,10 @@ export default function ProductsPage() {
                     alt="Become Seller"
                     className="
                     w-full
-                    max-w-lg
+                    max-w-xs
+                    sm:max-w-md
+                    lg:max-w-lg
+                    h-44 sm:h-64 lg:h-96
                     object-contain
                     "
                   />
