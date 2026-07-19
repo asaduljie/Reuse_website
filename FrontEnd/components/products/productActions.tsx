@@ -223,7 +223,9 @@ export default function ProductActions({
               whitespace-nowrap
               "
             >
-              <FaShoppingCart className="text-[9px] sm:text-[10px]" /> di Keranjang
+              <FaShoppingCart className="text-[9px] sm:text-[10px]" />
+              <span className="hidden sm:inline ml-1"> di Keranjang</span>
+              <span className="inline sm:hidden font-black ml-1">✓</span>
             </button>
           )}
 

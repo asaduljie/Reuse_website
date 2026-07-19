@@ -5,15 +5,16 @@ import NotificationBellButton from "./notifications/NotificationBell";
 import NotificationDropdown from "./notifications/NotificationDropdown";
 import { getNotifications, getUnreadCount, Notification } from "../../services/notificationService";
 import Link from "next/link";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaBars } from "react-icons/fa";
 
 interface TopbarProps {
   title: string;
   userName: string;
   role: string;
+  onToggleSidebar?: () => void;
 }
 
-export default function Topbar({ title, userName, role }: TopbarProps) {
+export default function Topbar({ title, userName, role, onToggleSidebar }: TopbarProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -42,22 +43,32 @@ export default function Topbar({ title, userName, role }: TopbarProps) {
   }, []);
 
   return (
-    <header className="bg-white rounded-[30px] shadow-sm px-8 py-5 flex items-center justify-between">
+    <header className="bg-white rounded-[20px] sm:rounded-[30px] shadow-sm px-4 sm:px-8 py-4 sm:py-5 flex items-center justify-between gap-4">
       {/* LEFT */}
-      <div>
-        <p className="text-gray-500 text-sm">Dashboard</p>
-        <h1 className="text-3xl font-bold mt-1">{title}</h1>
+      <div className="flex items-center gap-2 sm:gap-3">
+        {onToggleSidebar && (
+          <button
+            onClick={onToggleSidebar}
+            className="lg:hidden text-gray-500 hover:text-[#145A3B] p-2 hover:bg-gray-100 rounded-xl transition cursor-pointer"
+          >
+            <FaBars className="text-lg sm:text-xl" />
+          </button>
+        )}
+        <div>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">Dashboard</p>
+          <h1 className="text-lg sm:text-2xl font-black text-gray-800 tracking-tight mt-0.5">{title}</h1>
+        </div>
       </div>
 
       {/* RIGHT */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-3 sm:gap-5">
         {/* Search */}
         <div className="hidden lg:flex items-center gap-3 bg-[#F7F8FA] rounded-full px-5 py-3 w-80">
           <FaSearch className="text-gray-400" />
           <input
             type="text"
             placeholder="Cari..."
-            className="bg-transparent outline-none w-full text-sm"
+            className="bg-transparent outline-none w-full text-sm font-semibold"
           />
         </div>
 
@@ -77,15 +88,15 @@ export default function Topbar({ title, userName, role }: TopbarProps) {
         </div>
 
         {/* User */}
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <h3 className="font-semibold text-sm">{userName}</h3>
-            <p className="text-xs text-gray-500">{role}</p>
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <h3 className="font-extrabold text-sm text-gray-800 leading-tight">{userName}</h3>
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">{role}</p>
           </div>
           <img
             src="/images/avatar.png"
             alt="Avatar"
-            className="w-12 h-12 rounded-full object-cover border-2 border-[#145A3B]"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-[#145A3B] shadow-sm"
           />
         </div>
       </div>

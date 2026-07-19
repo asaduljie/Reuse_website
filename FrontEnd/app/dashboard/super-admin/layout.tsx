@@ -12,6 +12,8 @@ export default function SuperAdminLayout({ children }: { children: ReactNode }) 
   const [user, setUser] = useState<{ name?: string; role?: string } | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   useEffect(() => {
     setIsHydrated(true);
     const storedUser = getCurrentUser();
@@ -32,14 +34,19 @@ export default function SuperAdminLayout({ children }: { children: ReactNode }) 
 
   return (
     <div className="flex min-h-screen bg-[#F7F8FA]">
-      <Sidebar role="super_admin" />
-      <main className="flex-1 ml-72 p-8">
+      <Sidebar
+        role="super_admin"
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <main className="flex-1 lg:ml-72 p-4 sm:p-8 transition-all duration-300">
         <Topbar
           title="Super Admin"
           userName={isHydrated && user?.name ? user.name : "Super Admin"}
           role="Super Admin"
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
-        <div className="mt-8">{children}</div>
+        <div className="mt-6 sm:mt-8">{children}</div>
       </main>
     </div>
   );

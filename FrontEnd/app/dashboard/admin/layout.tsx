@@ -20,6 +20,7 @@ export default function AdminLayout({
   const router = useRouter();
   const [user, setUser] = useState<{ name?: string; role?: string } | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -66,13 +67,19 @@ export default function AdminLayout({
       "
     >
 
-      <Sidebar role="admin" />
+      <Sidebar
+        role="admin"
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <main
         className="
         flex-1
-        ml-72
-        p-8
+        lg:ml-72
+        p-4 sm:p-8
+        transition-all
+        duration-300
         "
       >
 
@@ -84,9 +91,11 @@ export default function AdminLayout({
 
           role="Admin"
 
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+
         />
 
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
 
           {children}
 

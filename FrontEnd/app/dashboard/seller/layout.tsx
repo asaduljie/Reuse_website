@@ -12,6 +12,8 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<{ name?: string; role?: string } | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   useEffect(() => {
     setIsHydrated(true);
     const stored = getCurrentUser();
@@ -33,14 +35,19 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-[#F7F8FA]">
-      <Sidebar role="seller" />
-      <main className="flex-1 ml-72 p-8">
+      <Sidebar
+        role="seller"
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <main className="flex-1 lg:ml-72 p-4 sm:p-8 transition-all duration-300">
         <Topbar
           title="Seller Dashboard"
           userName={isHydrated && user?.name ? user.name : "Seller"}
           role="Seller"
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
-        <div className="mt-8">{children}</div>
+        <div className="mt-6 sm:mt-8">{children}</div>
       </main>
     </div>
   );
