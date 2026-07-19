@@ -13,7 +13,15 @@ export default function RegisterPage() {
     email: "",
     password: "",
     phone: "",
+    role: "customer",
   });
+
+  const toggleRole = (newRole: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      role: newRole,
+    }));
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -123,6 +131,45 @@ export default function RegisterPage() {
                 className="bg-slate-50 border border-slate-100 text-slate-800 placeholder-slate-400 p-3.5 rounded-2xl w-full focus:outline-none focus:border-emerald-500 focus:bg-white transition-all duration-300 font-semibold text-sm"
                 required
               />
+            </div>
+
+            {/* Custom Sliding Role Switch */}
+            <div className="pt-2">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">
+                Daftar Sebagai
+              </label>
+              <div className="relative w-full h-12 bg-slate-100 rounded-2xl p-1 flex items-center cursor-pointer select-none">
+                {/* Sliding Indicator */}
+                <div
+                  className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#145A3B] rounded-xl transition-all duration-300 ease-out shadow-sm ${
+                    formData.role === "seller"
+                      ? "left-[calc(50%+2px)]"
+                      : "left-1"
+                  }`}
+                />
+                
+                {/* Customer button */}
+                <button
+                  type="button"
+                  onClick={() => toggleRole("customer")}
+                  className={`relative z-10 w-1/2 text-center text-xs font-black uppercase tracking-wider transition-colors duration-300 focus:outline-none ${
+                    formData.role === "customer" ? "text-white" : "text-slate-500"
+                  }`}
+                >
+                  Customer
+                </button>
+
+                {/* Seller button */}
+                <button
+                  type="button"
+                  onClick={() => toggleRole("seller")}
+                  className={`relative z-10 w-1/2 text-center text-xs font-black uppercase tracking-wider transition-colors duration-300 focus:outline-none ${
+                    formData.role === "seller" ? "text-white" : "text-slate-500"
+                  }`}
+                >
+                  Seller
+                </button>
+              </div>
             </div>
 
             <button
