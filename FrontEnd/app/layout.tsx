@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 
 import FloatingChat from "../components/layout/FloatingChat";
 import GlobalAlertModal from "../components/common/GlobalAlertModal";
+import GlobalNavigationLoader from "../components/common/GlobalNavigationLoader";
 
 export default function RootLayout({
   children,
@@ -27,9 +28,11 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
-        <FloatingChat />
-        <GlobalAlertModal />
+        <GlobalNavigationLoader>
+          {children}
+          <FloatingChat />
+          <GlobalAlertModal />
+        </GlobalNavigationLoader>
       </body>
     </html>
   );
