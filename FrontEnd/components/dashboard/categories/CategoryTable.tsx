@@ -47,8 +47,8 @@ export default function CategoryTable({
     return(
 
         <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
-
-            <table className="w-full">
+            <div className="overflow-x-auto w-full custom-scrollbar">
+                <table className="w-full min-w-[800px]">
 
                 <thead className="bg-[#145A3B] text-white">
 
@@ -197,6 +197,7 @@ export default function CategoryTable({
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 

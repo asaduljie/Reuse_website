@@ -157,6 +157,31 @@ export default function ProductForm({
 
         e.preventDefault();
 
+        if (!form.name.trim()) {
+            alert("Nama produk tidak boleh kosong!");
+            return;
+        }
+
+        if (!form.category) {
+            alert("Silakan pilih kategori produk!");
+            return;
+        }
+
+        if (form.price <= 0) {
+            alert("Harga produk harus lebih besar dari 0!");
+            return;
+        }
+
+        if (form.stock < 0) {
+            alert("Stok produk tidak boleh kurang dari 0!");
+            return;
+        }
+
+        if (!form.image) {
+            alert("Silakan unggah gambar produk!");
+            return;
+        }
+
         onSubmit(form);
 
     }

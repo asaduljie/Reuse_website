@@ -31,6 +31,14 @@ export default function ProfilePage() {
     await new Promise((r) => setTimeout(r, 600));
   };
 
+  const handleAvatarChange = (avatarBase64: string) => {
+    if (!user) return;
+    const updated = { ...user, avatar: avatarBase64 };
+    setUser(updated);
+    localStorage.setItem("user", JSON.stringify(updated));
+    window.dispatchEvent(new Event("storage"));
+  };
+
   if (!user) return null;
 
   return (
@@ -50,7 +58,7 @@ export default function ProfilePage() {
 
           {/* Content */}
           <div className="flex-1 min-w-0 space-y-6">
-            <ProfileCard user={user} />
+            <ProfileCard user={user} onAvatarChange={handleAvatarChange} />
             <ProfileForm
               initialData={{ name: user.name, email: user.email, phone: user.phone || "" }}
               onSave={handleSave}

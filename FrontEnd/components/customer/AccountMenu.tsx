@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaUser, FaClipboardList, FaHeart, FaMapMarkerAlt, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaUser, FaClipboardList, FaHeart, FaMapMarkerAlt, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { logout } from "../../utils/auth";
 import { useRouter } from "next/navigation";
 
 const MENU = [
   { label: "Profil Saya",   href: "/profile",            icon: FaUser },
   { label: "Pesanan Saya",  href: "/profile/orders",     icon: FaClipboardList },
-  { label: "Wishlist",      href: "/wishlist",           icon: FaHeart },
+  { label: "Wishlist",      href: "/profile/wishlist",   icon: FaHeart },
   { label: "Alamat",        href: "/profile/addresses",  icon: FaMapMarkerAlt },
   { label: "Pengaturan",    href: "/profile/settings",   icon: FaCog },
 ];
@@ -49,9 +49,20 @@ export default function AccountMenu() {
             </Link>
           );
         })}
+        
+        <div className="border-t border-gray-100 my-2" />
+
+        <Link
+          href="/"
+          className="flex items-center gap-3 px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition"
+        >
+          <FaHome className="text-base shrink-0 text-[#145A3B]" />
+          Kembali ke Homepage
+        </Link>
+
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition"
+          className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition cursor-pointer"
         >
           <FaSignOutAlt className="text-base shrink-0" />
           Keluar

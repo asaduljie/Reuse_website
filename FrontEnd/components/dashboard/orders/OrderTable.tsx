@@ -47,8 +47,8 @@ export default function OrderTable({
     return(
 
         <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
-
-            <table className="w-full">
+            <div className="overflow-x-auto w-full custom-scrollbar">
+                <table className="w-full min-w-[800px]">
 
                 <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 font-semibold text-xs tracking-wider uppercase">
                     <tr>
@@ -171,6 +171,7 @@ export default function OrderTable({
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 

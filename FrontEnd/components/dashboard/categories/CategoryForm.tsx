@@ -80,6 +80,16 @@ export default function CategoryForm({
 
         e.preventDefault();
 
+        if (!form.name.trim()) {
+            alert("Nama kategori tidak boleh kosong!");
+            return;
+        }
+
+        if (!form.slug.trim()) {
+            alert("Slug kategori tidak boleh kosong!");
+            return;
+        }
+
         onSubmit(form);
 
     }
@@ -118,6 +128,8 @@ export default function CategoryForm({
 
                     }
 
+                    required
+
                     className="w-full border rounded-xl mt-2 px-4 py-3"
 
                 />
@@ -147,6 +159,8 @@ export default function CategoryForm({
                         )
 
                     }
+
+                    required
 
                     className="w-full border rounded-xl mt-2 px-4 py-3"
 

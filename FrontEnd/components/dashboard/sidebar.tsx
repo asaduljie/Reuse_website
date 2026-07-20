@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { FaSignOutAlt, FaHome, FaTimes } from "react-icons/fa";
 
 import {
@@ -26,6 +27,11 @@ export default function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+
+  // Auto-close sidebar on mobile when navigating
+  useEffect(() => {
+    onClose?.();
+  }, [pathname]);
 
   let menus = sellerMenus;
 

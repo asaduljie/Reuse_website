@@ -25,6 +25,7 @@ export default function ProfileForm({ initialData, onSave }: Props) {
     await onSave(form);
     setSaving(false);
     setSuccess(true);
+    alert("Profil berhasil diperbarui!");
     setTimeout(() => setSuccess(false), 3000);
   };
 
