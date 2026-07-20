@@ -66,7 +66,7 @@ ReUse is a modern, sustainable circular economy marketplace web application that
 *   **No Horizontal Scroll Leakage**: The entire site must fit within `100vw`. No horizontal scrollbars are permitted on any mobile viewport (320px–414px width).
 *   **Emerald Dark Green Aesthetic**: Main brand colors must be premium dark greens (`#145A3B`, `#0e402a`).
 *   **Mobile Hamburger Menu Drawer**: Collapses Navbar links into a dark green glassmorphic dropdown list with round active state indicators.
-*   **Centered Product Detail CTAs**: On screens smaller than `sm` (640px), the Wishlist, Cart, and WhatsApp buttons must stack vertically with text and icons aligned exactly to the center of the button container.
+*   **Centered Product Detail CTAs**: On screens smaller than `sm` (640px), the Wishlist, Cart, and WhatsApp buttons must stack vertically with text and icons aligned exactly to the center of the container.
 *   **Responsive AI Chatbot CS Container**: On mobile viewports, the chatbot widget width must scale dynamically (`w-[calc(100vw-2.5rem)]`) and height adjust to fit standard viewports.
 *   **2-Column Grid Layout**: Product catalogue recommendations (Frequently Bought Together) must display as a 2-column grid (`grid-cols-2`) on mobile instead of wrapping to a single column or extending horizontally.
 *   **Fluid Seller Banner Card**: The catalogue "Punya Barang Layak Pakai?" card must stack elements vertically on mobile with centered alignment, safe padding (`px-6 py-10`), and a scaling image banner.
