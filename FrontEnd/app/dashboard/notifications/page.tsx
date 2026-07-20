@@ -8,16 +8,23 @@ import {
   Notification,
 } from "../../../services/notificationService";
 import NotificationList from "../../../components/dashboard/notifications/NotificationList";
-import { FaBell, FaCheckDouble, FaTrash, FaInbox, FaEnvelopeOpen } from "react-icons/fa";
+import ChibiFarmerLoader from "../../../components/dashboard/notifications/ChibiFarmerLoader";
+import { FaBell, FaCheckDouble, FaTrash, FaInbox, FaEnvelopeOpen, FaArrowLeft } from "react-icons/fa";
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [filter, setFilter] = useState<"ALL" | "UNREAD" | "READ">("ALL");
+  const [isLoading, setIsLoading] = useState(true);
 
   const refresh = () => setNotifications(getNotifications());
 
   useEffect(() => {
-    refresh();
+    // Simulate a soft load time to show the farmer chibi animation beautifully
+    const timer = setTimeout(() => {
+      refresh();
+      setIsLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
   }, []);
 
   const totalCount = notifications.length;
@@ -43,8 +50,33 @@ export default function NotificationsPage() {
     refresh();
   };
 
+  const handleBack = () => {
+    if (typeof window !== "undefined") {
+      // Go back to the dashboard page they came from
+      window.history.back();
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col min-h-[60vh] items-center justify-center">
+        <ChibiFarmerLoader />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      {/* Back Button */}
+      <div className="flex items-center">
+        <button
+          onClick={handleBack}
+          className="inline-flex items-center gap-2 text-xs font-black text-gray-400 hover:text-[#145A3B] transition-colors group cursor-pointer bg-transparent border-none p-0 outline-none select-none"
+        >
+          <FaArrowLeft className="text-[10px] transition-transform group-hover:-translate-x-1" /> Kembali ke Dashboard
+        </button>
+      </div>
+
       {/* Premium Header Banner */}
       <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#145A3B] to-[#0A2F1D] text-white p-8 sm:p-10 shadow-xl border border-emerald-800/20">
         <div className="absolute right-0 bottom-0 opacity-10 translate-x-12 translate-y-12">
