@@ -72,9 +72,8 @@ export default function Sidebar({
       <aside
         className={`
         w-72
-        h-screen
         fixed
-        top-0
+        inset-y-0
         left-0
         bg-[#145A3B]
         text-white

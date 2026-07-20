@@ -62,6 +62,8 @@ export default function AdminLayout({
     <div
       className="
       flex
+      flex-col
+      lg:flex-row
       min-h-screen
       bg-[#F7F8FA]
       "

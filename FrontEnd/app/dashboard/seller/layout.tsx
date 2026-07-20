@@ -34,7 +34,7 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
   }, [router]);
 
   return (
-    <div className="flex min-h-screen bg-[#F7F8FA]">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#F7F8FA]">
       <Sidebar
         role="seller"
         isOpen={sidebarOpen}

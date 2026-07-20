@@ -13,6 +13,12 @@ export const metadata: Metadata = {
   description: "Marketplace modern untuk barang bekas berkualitas tinggi",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 import FloatingChat from "../components/layout/FloatingChat";
 import GlobalAlertModal from "../components/common/GlobalAlertModal";
 import GlobalNavigationLoader from "../components/common/GlobalNavigationLoader";
