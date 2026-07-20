@@ -8,7 +8,7 @@ import {
   Notification,
 } from "../../../services/notificationService";
 import NotificationList from "../../../components/dashboard/notifications/NotificationList";
-import ChibiFarmerLoader from "../../../components/dashboard/notifications/ChibiFarmerLoader";
+import PaperBagLoader from "../../../components/dashboard/notifications/PaperBagLoader";
 import { FaBell, FaCheckDouble, FaTrash, FaInbox, FaEnvelopeOpen, FaArrowLeft } from "react-icons/fa";
 
 export default function NotificationsPage() {
@@ -19,7 +19,7 @@ export default function NotificationsPage() {
   const refresh = () => setNotifications(getNotifications());
 
   useEffect(() => {
-    // Simulate a soft load time to show the farmer chibi animation beautifully
+    // Simulate a soft load time to show the paper bag loader beautifully
     const timer = setTimeout(() => {
       refresh();
       setIsLoading(false);
@@ -58,32 +58,31 @@ export default function NotificationsPage() {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/20 backdrop-blur-md transition-all duration-300">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/5 backdrop-blur-sm transition-all duration-300">
         <div className="bg-white/80 backdrop-blur-md rounded-[32px] p-8 border border-gray-100/50 shadow-2xl">
-          <ChibiFarmerLoader />
+          <PaperBagLoader />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Premium Pill Back Button */}
-      <div className="flex items-center">
+    <div className="space-y-6 -mt-8 sm:-mt-10">
+      {/* Premium Header Banner (Mounted all the way to the top of the content area) */}
+      <div className="relative overflow-hidden rounded-b-[30px] rounded-t-none bg-gradient-to-r from-[#145A3B] to-[#0A2F1D] text-white p-8 sm:p-10 shadow-xl border border-emerald-800/20">
+        <div className="absolute right-0 bottom-0 opacity-10 translate-x-12 translate-y-12">
+          <FaBell className="text-[200px]" />
+        </div>
+        
+        {/* Back Button inside the banner (Aesthetic Red Theme) */}
         <button
           onClick={handleBack}
-          className="inline-flex items-center gap-2.5 px-4.5 py-2.5 rounded-2xl text-xs font-black text-gray-500 hover:text-[#145A3B] bg-white hover:bg-emerald-50/50 border border-gray-100 hover:border-emerald-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer select-none"
+          className="relative z-20 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black text-white bg-red-600 hover:bg-red-500 active:scale-95 shadow-md shadow-red-900/30 transition-all duration-300 group cursor-pointer mb-6"
         >
           <FaArrowLeft className="text-[10px] transition-transform group-hover:-translate-x-1" />
           Kembali ke Dashboard
         </button>
-      </div>
 
-      {/* Premium Header Banner */}
-      <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#145A3B] to-[#0A2F1D] text-white p-8 sm:p-10 shadow-xl border border-emerald-800/20">
-        <div className="absolute right-0 bottom-0 opacity-10 translate-x-12 translate-y-12">
-          <FaBell className="text-[200px]" />
-        </div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <span className="text-[10px] sm:text-xs font-black tracking-widest uppercase bg-emerald-400/20 text-emerald-300 px-3.5 py-1.5 rounded-full border border-emerald-400/10">
