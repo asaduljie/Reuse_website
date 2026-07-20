@@ -54,7 +54,8 @@ export interface Order {
     note?: string;
 }
 
-const API_URL = "http://localhost:5000/api/orders";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_URL = `${BASE_URL}/orders`;
 const ORDERS_KEY = "reuse_orders";
 
 // Predefined mock orders to seed localStorage for customer ID 4 (Amanda)

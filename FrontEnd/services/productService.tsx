@@ -22,7 +22,8 @@ export interface Product {
     updated_at?: string;
 }
 
-const API_URL = "http://localhost:5000/api/products";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace(/\/api$/, "") : "http://localhost:5000";
+const API_URL = `${BASE_URL}/api/products`;
 
 const MOCK_PRODUCTS: Product[] = [
   {
@@ -104,7 +105,7 @@ export const mapApiProductToProduct = (apiProduct: any): Product => {
     
     // Legacy support fields:
     category: apiProduct.category || "Fashion",
-    imageUrl: apiProduct.imageUrl || (apiProduct.image ? `http://localhost:5000/uploads/${apiProduct.image}` : "/images/product1.jpg")
+    imageUrl: apiProduct.imageUrl || (apiProduct.image ? `${BASE_URL}/uploads/${apiProduct.image}` : "/images/product1.jpg")
   };
 };
 

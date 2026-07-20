@@ -50,13 +50,9 @@ async function seed() {
   };
 
   try {
-    // 1. Truncate tables (order is important due to foreign keys)
+    // 1. Truncate tables using PostgreSQL cascade method
     console.log("Mengosongkan tabel lama...");
-    await queryAsync("SET FOREIGN_KEY_CHECKS = 0;");
-    await queryAsync("TRUNCATE TABLE order_items;");
-    await queryAsync("TRUNCATE TABLE orders;");
-    await queryAsync("TRUNCATE TABLE products;");
-    await queryAsync("SET FOREIGN_KEY_CHECKS = 1;");
+    await queryAsync("TRUNCATE TABLE order_items, orders, products RESTART IDENTITY CASCADE;");
     console.log("Tabel berhasil dikosongkan.");
 
     // 2. Seed Products
