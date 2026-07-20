@@ -63,6 +63,17 @@ export default function Navbar() {
 
   useEffect(() => {
     refreshUser();
+
+    // Sync search input keyword with URL on navigation
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const searchParam = params.get("search");
+      if (searchParam) {
+        setKeyword(searchParam);
+      } else {
+        setKeyword("");
+      }
+    }
   }, [pathname]);
 
   // Listen for storage changes (login/logout from other tabs or same page)
