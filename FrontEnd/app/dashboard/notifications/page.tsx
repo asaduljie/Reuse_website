@@ -52,28 +52,30 @@ export default function NotificationsPage() {
 
   const handleBack = () => {
     if (typeof window !== "undefined") {
-      // Go back to the dashboard page they came from
       window.history.back();
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-[60vh] items-center justify-center">
-        <ChibiFarmerLoader />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/20 backdrop-blur-md transition-all duration-300">
+        <div className="bg-white/80 backdrop-blur-md rounded-[32px] p-8 border border-gray-100/50 shadow-2xl">
+          <ChibiFarmerLoader />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Back Button */}
+      {/* Premium Pill Back Button */}
       <div className="flex items-center">
         <button
           onClick={handleBack}
-          className="inline-flex items-center gap-2 text-xs font-black text-gray-400 hover:text-[#145A3B] transition-colors group cursor-pointer bg-transparent border-none p-0 outline-none select-none"
+          className="inline-flex items-center gap-2.5 px-4.5 py-2.5 rounded-2xl text-xs font-black text-gray-500 hover:text-[#145A3B] bg-white hover:bg-emerald-50/50 border border-gray-100 hover:border-emerald-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer select-none"
         >
-          <FaArrowLeft className="text-[10px] transition-transform group-hover:-translate-x-1" /> Kembali ke Dashboard
+          <FaArrowLeft className="text-[10px] transition-transform group-hover:-translate-x-1" />
+          Kembali ke Dashboard
         </button>
       </div>
 
