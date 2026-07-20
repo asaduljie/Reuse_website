@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useRef } from "react";
 import { getCurrentUser } from "../utils/roleGuard";
 import { getProducts, Product } from "../services/productService";
+import { logout } from "../utils/auth";
 
 import {
   FaBars,
@@ -39,11 +40,18 @@ export default function Navbar() {
     useState("");
 
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("");
+  const [userAvatar, setUserAvatar] = useState<string>("");
 
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
+
+  const initials = useMemo(() => {
+    if (!userName) return "?";
+    return userName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  }, [userName]);
 
   // Fetch products for suggestion on mount
   useEffect(() => {
@@ -103,11 +111,17 @@ export default function Navbar() {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUserRole(parsedUser?.role || null);
+        setUserName(parsedUser?.name || "");
+        setUserAvatar(parsedUser?.avatar || "");
       } catch {
         setUserRole(null);
+        setUserName("");
+        setUserAvatar("");
       }
     } else {
       setUserRole(null);
+      setUserName("");
+      setUserAvatar("");
     }
   };
 
@@ -815,7 +829,7 @@ export default function Navbar() {
               {/* AUTH ACTIONS */}
               {
 
-                !isLogin && (
+                !isLogin ? (
 
                   <div className="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-emerald-800/40">
 
@@ -839,6 +853,63 @@ export default function Navbar() {
                       </button>
                     </Link>
 
+                  </div>
+
+                ) : (
+
+                  <div className="mt-6 pt-4 border-t border-emerald-800/40 space-y-2">
+                    {/* User profile card in mobile menu */}
+                    <div className="flex items-center gap-3 px-4 py-3 bg-white/5 rounded-2xl mb-4 border border-emerald-800/20">
+                      {userAvatar ? (
+                        <img src={userAvatar} alt={userName} className="w-10 h-10 rounded-full object-cover border border-emerald-500/30" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-emerald-700/60 border border-emerald-500/30 flex items-center justify-center text-white text-sm font-black uppercase shrink-0">
+                          {initials}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-white text-xs font-bold truncate max-w-[150px]">{userName}</p>
+                        <p className="text-emerald-300 text-[10px] uppercase font-bold tracking-wider mt-0.5">{userRole === 'super_admin' ? 'Super Admin' : userRole}</p>
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/profile"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-extrabold text-emerald-100 hover:bg-white/10 hover:text-white transition-all duration-200"
+                    >
+                      <span>Profil Saya</span>
+                      <span className="text-[10px] opacity-60">→</span>
+                    </Link>
+
+                    {userRole && (userRole === "admin" || userRole === "seller" || userRole === "super_admin") && (
+                      <Link
+                        href={
+                          userRole === "admin"
+                            ? "/dashboard/admin"
+                            : userRole === "super_admin"
+                            ? "/dashboard/super-admin"
+                            : "/dashboard/seller"
+                        }
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-extrabold text-emerald-100 hover:bg-white/10 hover:text-white transition-all duration-200"
+                      >
+                        <span>Dashboard</span>
+                        <span className="text-[10px] opacity-60">→</span>
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        logout();
+                        window.location.reload();
+                      }}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-extrabold text-red-300 hover:bg-red-950/20 hover:text-red-200 transition-all duration-200 cursor-pointer text-left"
+                    >
+                      <span>Keluar</span>
+                      <span className="text-[10px] opacity-60">→</span>
+                    </button>
                   </div>
 
                 )
