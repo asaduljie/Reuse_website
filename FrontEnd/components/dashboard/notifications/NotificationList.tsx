@@ -50,15 +50,16 @@ export default function NotificationList({
   const groups = groupByDate(notifications);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {groups.map((group) => (
-        <div key={group.label} className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="px-6 py-3 bg-gray-50 border-b border-gray-100">
-            <span className="text-xs font-extrabold text-gray-500 uppercase tracking-wider">
+        <div key={group.label} className="space-y-4">
+          <div className="flex items-center gap-3 px-1">
+            <span className="text-[10px] font-black text-[#145A3B] uppercase tracking-widest bg-emerald-50/50 px-3.5 py-1.5 rounded-full border border-emerald-100/40">
               {group.label}
             </span>
+            <div className="h-[1px] bg-gray-100 flex-1" />
           </div>
-          <div>
+          <div className="bg-white rounded-3xl border border-gray-100/80 shadow-sm overflow-hidden divide-y divide-gray-50">
             {group.items.map((n) => (
               <NotificationItem key={n.id} notification={n} onRefresh={onRefresh} />
             ))}

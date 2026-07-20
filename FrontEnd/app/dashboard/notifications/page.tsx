@@ -8,7 +8,7 @@ import {
   Notification,
 } from "../../../services/notificationService";
 import NotificationList from "../../../components/dashboard/notifications/NotificationList";
-import { FaBell, FaCheckDouble, FaTrash } from "react-icons/fa";
+import { FaBell, FaCheckDouble, FaTrash, FaInbox, FaEnvelopeOpen } from "react-icons/fa";
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -20,7 +20,9 @@ export default function NotificationsPage() {
     refresh();
   }, []);
 
+  const totalCount = notifications.length;
   const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const readCount = totalCount - unreadCount;
 
   const filtered =
     filter === "UNREAD"
@@ -43,61 +45,103 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-[#145A3B] font-extrabold">
-            Pusat Notifikasi
-          </p>
-          <h1 className="text-4xl font-black text-gray-900 mt-1.5 flex items-center gap-3">
-            <FaBell className="text-[#145A3B]" /> Notifikasi
-          </h1>
-          {unreadCount > 0 && (
-            <p className="text-sm text-gray-500 mt-1 font-semibold">
-              {unreadCount} notifikasi belum dibaca
+      {/* Premium Header Banner */}
+      <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#145A3B] to-[#0A2F1D] text-white p-8 sm:p-10 shadow-xl border border-emerald-800/20">
+        <div className="absolute right-0 bottom-0 opacity-10 translate-x-12 translate-y-12">
+          <FaBell className="text-[200px]" />
+        </div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <span className="text-[10px] sm:text-xs font-black tracking-widest uppercase bg-emerald-400/20 text-emerald-300 px-3.5 py-1.5 rounded-full border border-emerald-400/10">
+              Pusat Kendali Sistem
+            </span>
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-4 flex items-center gap-3">
+              <FaBell className="text-emerald-400 animate-pulse text-2xl sm:text-3xl" /> Notifikasi
+            </h1>
+            <p className="text-xs sm:text-sm text-emerald-200/80 mt-2 font-medium max-w-md leading-relaxed">
+              Pantau aktivitas terbaru marketplace, verifikasi toko, dan kelola pembaruan sistem di satu dashboard terpadu.
             </p>
-          )}
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={handleMarkAll}
-            className="inline-flex items-center gap-2 bg-[#145A3B] hover:bg-[#0F472E] text-white px-5 py-3 rounded-2xl text-sm font-bold shadow-sm transition"
-          >
-            <FaCheckDouble className="text-xs" /> Tandai Semua Dibaca
-          </button>
-          <button
-            onClick={handleDeleteRead}
-            className="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 px-5 py-3 rounded-2xl text-sm font-bold transition border border-red-100"
-          >
-            <FaTrash className="text-xs" /> Hapus yang Sudah Dibaca
-          </button>
+          </div>
+          <div className="flex flex-wrap gap-3 shrink-0">
+            <button
+              onClick={handleMarkAll}
+              className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-white px-5 py-3 rounded-2xl text-xs sm:text-sm font-extrabold shadow-lg shadow-emerald-900/30 transition-all duration-300 cursor-pointer"
+            >
+              <FaCheckDouble className="text-xs" /> Tandai Semua Dibaca
+            </button>
+            <button
+              onClick={handleDeleteRead}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 active:scale-95 text-white px-5 py-3 rounded-2xl text-xs sm:text-sm font-extrabold transition-all duration-300 border border-white/10 cursor-pointer"
+            >
+              <FaTrash className="text-xs text-red-300" /> Hapus yang Dibaca
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex gap-2">
-        {(["ALL", "UNREAD", "READ"] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-5 py-2.5 rounded-2xl text-sm font-bold transition ${
-              filter === f
-                ? "bg-[#145A3B] text-white shadow-sm"
-                : "bg-white text-gray-600 border border-gray-100 hover:border-emerald-100"
-            }`}
-          >
-            {f === "ALL" ? "Semua" : f === "UNREAD" ? "Belum Dibaca" : "Sudah Dibaca"}
-            {f === "UNREAD" && unreadCount > 0 && (
-              <span className="ml-2 bg-white/30 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                {unreadCount}
-              </span>
-            )}
-          </button>
-        ))}
+      {/* Stats Cards Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {/* Total Notif */}
+        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 transition-all hover:shadow-md duration-300">
+          <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-500 border border-gray-100">
+            <FaBell className="text-lg" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Semua Notifikasi</p>
+            <h3 className="text-2xl font-black text-gray-800 mt-1">{totalCount}</h3>
+          </div>
+        </div>
+        
+        {/* Belum Dibaca */}
+        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 transition-all hover:shadow-md duration-300">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 border border-amber-100/50">
+            <FaInbox className="text-lg" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Belum Dibaca</p>
+            <h3 className="text-2xl font-black text-amber-600 mt-1">{unreadCount}</h3>
+          </div>
+        </div>
+
+        {/* Sudah Dibaca */}
+        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 transition-all hover:shadow-md duration-300">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100/50">
+            <FaEnvelopeOpen className="text-lg" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Sudah Dibaca</p>
+            <h3 className="text-2xl font-black text-emerald-700 mt-1">{readCount}</h3>
+          </div>
+        </div>
       </div>
 
-      {/* Notification grouped list */}
-      <NotificationList notifications={filtered} onRefresh={refresh} />
+      {/* Filter and Content Card Container */}
+      <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6">
+        {/* Filter Navigation */}
+        <div className="flex gap-2 p-1 bg-gray-50 rounded-2xl w-fit border border-gray-100">
+          {(["ALL", "UNREAD", "READ"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-300 cursor-pointer ${
+                filter === f
+                  ? "bg-white text-gray-800 shadow-sm border border-gray-100"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
+            >
+              {f === "ALL" ? "Semua" : f === "UNREAD" ? "Belum Dibaca" : "Sudah Dibaca"}
+              {f === "UNREAD" && unreadCount > 0 && (
+                <span className="ml-2 bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Notification list */}
+        <NotificationList notifications={filtered} onRefresh={refresh} />
+      </div>
     </div>
   );
 }
