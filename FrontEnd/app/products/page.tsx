@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import Navbar from "../../components/navbar";
 import Footer from "../../components/footer";
@@ -13,7 +14,7 @@ import {
   Product
 } from "../../services/productService";
 
-export default function ProductsPage() {
+function ProductsPageContent() {
 
   const [products, setProducts] =
     useState<Product[]>([]);
@@ -38,21 +39,33 @@ export default function ProductsPage() {
 
   const productPerPage = 8;
 
+  const searchParams = useSearchParams();
+  const searchParam = searchParams.get("search");
+  const categoryParam = searchParams.get("category");
+
   useEffect(() => {
-
     loadProducts();
+  }, []);
 
-    const params = new URLSearchParams(window.location.search);
-    const categoryParam = params.get("category");
+  useEffect(() => {
+    if (searchParam !== null) {
+      setSearch(searchParam);
+    } else {
+      setSearch("");
+    }
+  }, [searchParam]);
+
+  useEffect(() => {
     if (categoryParam) {
       const allCategories = getCategories();
       const found = allCategories.find(c => c.slug.toLowerCase() === categoryParam.toLowerCase());
       if (found) {
         setSelectedCategory(found.name);
       }
+    } else {
+      setSelectedCategory("Semua");
     }
-
-  }, []);
+  }, [categoryParam]);
 
   const loadProducts = async () => {
 
@@ -906,4 +919,16 @@ export default function ProductsPage() {
 
   );
 
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#F7F8FA]">
+        <div className="text-gray-400 text-sm font-semibold animate-pulse">Memuat Produk...</div>
+      </div>
+    }>
+      <ProductsPageContent />
+    </Suspense>
+  );
 }
