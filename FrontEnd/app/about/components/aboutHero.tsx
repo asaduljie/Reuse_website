@@ -10,6 +10,7 @@ export default function AboutHero() {
       relative
       overflow-hidden
       rounded-[35px]
+      border border-gray-150
       "
 
       style={{
@@ -30,19 +31,6 @@ export default function AboutHero() {
       <div
 
         className="
-        absolute
-        inset-0
-        bg-gradient-to-r
-        from-[#145A3B]/90
-        via-[#145A3B]/70
-        to-transparent
-        "
-
-      />
-
-      <div
-
-        className="
         relative
         z-10
         px-10
@@ -57,8 +45,7 @@ export default function AboutHero() {
 
           className="
           inline-block
-          bg-white/20
-          backdrop-blur
+          bg-[#145A3B]/10
           rounded-full
           px-5
           py-2
@@ -66,7 +53,7 @@ export default function AboutHero() {
           font-semibold
           tracking-widest
           uppercase
-          text-white
+          text-[#145A3B]
           "
 
         >
@@ -82,7 +69,7 @@ export default function AboutHero() {
           text-5xl
           lg:text-6xl
           font-bold
-          text-white
+          text-[#145A3B]
           leading-tight
           max-w-2xl
           "
@@ -102,7 +89,7 @@ export default function AboutHero() {
           className="
           mt-6
           text-lg
-          text-green-100
+          text-gray-650
           leading-8
           max-w-2xl
           "
@@ -134,14 +121,15 @@ export default function AboutHero() {
             <button
 
               className="
-              bg-white
-              text-[#145A3B]
+              bg-[#145A3B]
+              text-white
               px-8
               py-4
               rounded-full
               font-semibold
-              hover:bg-green-50
+              hover:bg-[#0c3a26]
               transition
+              cursor-pointer
               "
 
             >
@@ -158,14 +146,15 @@ export default function AboutHero() {
 
               className="
               border
-              border-white
-              text-white
+              border-[#145A3B]
+              text-[#145A3B]
               px-8
               py-4
               rounded-full
-              hover:bg-white
-              hover:text-[#145A3B]
+              hover:bg-[#145A3B]
+              hover:text-white
               transition
+              cursor-pointer
               "
 
             >
