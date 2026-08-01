@@ -197,12 +197,11 @@ export default function ProductForm({
         fileInputRef.current?.click();
     }
 
-    function submit(
+    const [submitting, setSubmitting] = useState(false);
 
+    async function submit(
         e: FormEvent<HTMLFormElement>
-
     ) {
-
         e.preventDefault();
 
         if (!form.name.trim()) {
@@ -225,13 +224,24 @@ export default function ProductForm({
             return;
         }
 
-        if (!form.image) {
+        const finalImage = form.image || imagePreview;
+        if (!finalImage) {
             alert("Silakan unggah gambar produk!");
             return;
         }
 
-        onSubmit(form);
-
+        setSubmitting(true);
+        try {
+            await onSubmit({
+                ...form,
+                image: finalImage,
+            });
+        } catch (err: any) {
+            console.error("Gagal memperbarui produk:", err);
+            alert("Gagal memperbarui produk: " + (err?.message || "Terjadi kesalahan server"));
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     return (
@@ -657,29 +667,23 @@ export default function ProductForm({
             </div>
 
             <button
-
+                type="submit"
+                disabled={submitting}
                 className="
-
                 bg-[#145A3B]
-
                 text-white
-
                 px-8
-
                 py-4
-
                 rounded-2xl
-
                 hover:bg-[#0F472E]
-
                 transition
-
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+                cursor-pointer
+                font-bold
                 "
-
             >
-
-                {submitLabel}
-
+                {submitting ? "Menyimpan..." : submitLabel}
             </button>
 
         </form>
