@@ -18,13 +18,22 @@ const config = process.env.DATABASE_URL
 
 const pool = new Pool(config);
 
-// Verify Connection
+// Verify Connection & Auto-Migrate Schema
 pool.connect((err, client, release) => {
   if (err) {
     console.error("Database gagal terkoneksi:", err.stack);
   } else {
     console.log("Database berhasil terkoneksi ke Supabase PostgreSQL");
     release();
+
+    // Auto-migrate column types to ensure large image payloads (Base64/URLs) are supported
+    pool.query("ALTER TABLE products ALTER COLUMN image TYPE TEXT;", (migErr) => {
+      if (migErr) {
+        // Table or column might already be TEXT or not exist yet
+      } else {
+        console.log("Migration: Column products.image successfully updated to TEXT");
+      }
+    });
   }
 });
 

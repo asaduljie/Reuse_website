@@ -82,12 +82,19 @@ const createProduct = (req, res) => {
     image
   } = req.body;
 
+  const safeName = name || "";
+  const safeDescription = description || "";
+  const safePrice = Number(price) || 0;
+  const safeStock = Number(stock) || 0;
+  const safeCategory = category || "";
+
   let imageName = image || null;
-  if (image && image.startsWith("data:image/")) {
+  if (image && typeof image === "string" && image.startsWith("data:image/")) {
     try {
       const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
       if (matches && matches.length === 3) {
-        const ext = matches[1].split("/")[1];
+        const rawExt = matches[1].split("/")[1] || "jpeg";
+        const ext = rawExt.split("+")[0].split(";")[0];
         const buffer = Buffer.from(matches[2], 'base64');
         const filename = `${Date.now()}-uploaded.${ext}`;
         const filepath = require("path").join(__dirname, "../uploads", filename);
@@ -116,15 +123,16 @@ const createProduct = (req, res) => {
   db.query(
     sql,
     [
-      name,
-      description,
-      price,
-      stock,
-      category,
+      safeName,
+      safeDescription,
+      safePrice,
+      safeStock,
+      safeCategory,
       imageName
     ],
     (err, result) => {
       if (err) {
+        console.error("Database createProduct error:", err);
         return res.status(500).json({
           success: false,
           error: err.message
@@ -151,12 +159,20 @@ const updateProduct = (req, res) => {
     image
   } = req.body;
 
+  const productId = Number(id);
+  const safeName = name || "";
+  const safeDescription = description || "";
+  const safePrice = Number(price) || 0;
+  const safeStock = Number(stock) || 0;
+  const safeCategory = category || "";
+
   let imageName = image !== undefined ? image : null;
   if (image && typeof image === "string" && image.startsWith("data:image/")) {
     try {
       const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
       if (matches && matches.length === 3) {
-        const ext = matches[1].split("/")[1];
+        const rawExt = matches[1].split("/")[1] || "jpeg";
+        const ext = rawExt.split("+")[0].split(";")[0];
         const buffer = Buffer.from(matches[2], 'base64');
         const filename = `${Date.now()}-uploaded.${ext}`;
         const filepath = require("path").join(__dirname, "../uploads", filename);
@@ -184,7 +200,7 @@ const updateProduct = (req, res) => {
         image = ?
       WHERE id = ?
     `;
-    params = [name, description, price, stock, category, imageName, id];
+    params = [safeName, safeDescription, safePrice, safeStock, safeCategory, imageName, productId];
   } else {
     sql = `
       UPDATE products
@@ -196,7 +212,7 @@ const updateProduct = (req, res) => {
         category = ?
       WHERE id = ?
     `;
-    params = [name, description, price, stock, category, id];
+    params = [safeName, safeDescription, safePrice, safeStock, safeCategory, productId];
   }
 
   db.query(
@@ -204,6 +220,7 @@ const updateProduct = (req, res) => {
     params,
     (err, result) => {
       if (err) {
+        console.error("Database updateProduct error:", err);
         return res.status(500).json({
           success: false,
           error: err.message
