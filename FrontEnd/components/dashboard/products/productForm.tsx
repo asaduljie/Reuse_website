@@ -104,28 +104,65 @@ export default function ProductForm({
 
     }
 
+    function compressImage(file: File, callback: (base64: string) => void) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const rawResult = e.target?.result as string;
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                let width = img.width;
+                let height = img.height;
+                const MAX_WIDTH = 1200;
+                const MAX_HEIGHT = 1200;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height * MAX_WIDTH) / width);
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width = Math.round((width * MAX_HEIGHT) / height);
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext("2d");
+                if (ctx) {
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressed = canvas.toDataURL("image/jpeg", 0.85);
+                    callback(compressed);
+                } else {
+                    callback(rawResult);
+                }
+            };
+            img.onerror = () => callback(rawResult);
+            img.src = rawResult;
+        };
+        reader.readAsDataURL(file);
+    }
+
     function handleImageFile(file: File) {
         if (!ACCEPTED_TYPES.includes(file.type)) {
             setImageError("Hanya JPG, PNG, atau WEBP yang diperbolehkan.");
             return;
         }
 
-        if (file.size > MAX_FILE_SIZE) {
-            setImageError("Ukuran gambar maksimal 2MB.");
+        const MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 10MB
+        if (file.size > MAX_UPLOAD_SIZE) {
+            setImageError("Ukuran gambar terlalu besar (Maksimal 10MB).");
             return;
         }
 
         setImageError("");
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            const result = reader.result;
-            if (typeof result === "string") {
-                handleChange("image", result);
-                setImagePreview(result);
-            }
-        };
-        reader.readAsDataURL(file);
+        compressImage(file, (base64) => {
+            handleChange("image", base64);
+            setImagePreview(base64);
+        });
     }
 
     function handleFileInput(e: ChangeEvent<HTMLInputElement>) {
