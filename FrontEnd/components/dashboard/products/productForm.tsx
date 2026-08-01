@@ -66,10 +66,18 @@ export default function ProductForm({
 
     );
 
-    const [imagePreview, setImagePreview] = useState<string>(initialData?.image ?? "");
+    const [imagePreview, setImagePreview] = useState<string>(initialData?.image || (initialData as any)?.imageUrl || "");
     const [imageError, setImageError] = useState<string>("");
     const [dragOver, setDragOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (initialData) {
+            setForm(initialData);
+            const img = initialData.image || (initialData as any).imageUrl || "";
+            setImagePreview(img);
+        }
+    }, [initialData]);
 
     const ACCEPTED_TYPES = [
         "image/jpeg",

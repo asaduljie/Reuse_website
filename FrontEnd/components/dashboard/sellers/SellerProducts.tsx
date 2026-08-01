@@ -8,14 +8,14 @@ interface Props {
 
 export default function SellerProducts({ products }: Props) {
     const getProductImage = (product: Product) => {
-        if (product.imageUrl) return product.imageUrl;
         if (product.image) {
-            if (product.image.startsWith("http") || product.image.startsWith("/")) {
+            if (product.image.startsWith("http") || product.image.startsWith("/") || product.image.startsWith("data:")) {
                 return product.image;
             }
             return `http://localhost:5000/uploads/${product.image}`;
         }
-        return "/images/products/placeholder.jpg";
+        if (product.imageUrl) return product.imageUrl;
+        return "/images/product1.jpg";
     };
 
     return (

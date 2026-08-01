@@ -86,6 +86,20 @@ const MOCK_PRODUCTS: Product[] = [
 
 const products: Product[] = [...MOCK_PRODUCTS];
 
+const resolveProductImageUrl = (apiProduct: any): string => {
+  const img = apiProduct.image;
+  if (img && typeof img === "string" && (img.startsWith("data:") || img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/"))) {
+    return img;
+  }
+  if (apiProduct.imageUrl && typeof apiProduct.imageUrl === "string" && !apiProduct.imageUrl.includes("undefined")) {
+    return apiProduct.imageUrl;
+  }
+  if (img) {
+    return `${BASE_URL}/uploads/${img}`;
+  }
+  return "/images/product1.jpg";
+};
+
 // Helper to map backend data to modern Product structure
 export const mapApiProductToProduct = (apiProduct: any): Product => {
   return {
@@ -105,7 +119,7 @@ export const mapApiProductToProduct = (apiProduct: any): Product => {
     
     // Legacy support fields:
     category: apiProduct.category || "Fashion",
-    imageUrl: apiProduct.imageUrl || (apiProduct.image ? `${BASE_URL}/uploads/${apiProduct.image}` : "/images/product1.jpg")
+    imageUrl: resolveProductImageUrl(apiProduct)
   };
 };
 

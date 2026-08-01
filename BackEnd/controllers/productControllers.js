@@ -73,7 +73,6 @@ const getProductById = (req, res) => {
 };
 
 const createProduct = (req, res) => {
-
   const {
     name,
     description,
@@ -83,15 +82,21 @@ const createProduct = (req, res) => {
     image
   } = req.body;
 
-  let imageName = null;
+  let imageName = image || null;
   if (image && image.startsWith("data:image/")) {
-    const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (matches && matches.length === 3) {
-      const ext = matches[1].split("/")[1];
-      const buffer = Buffer.from(matches[2], 'base64');
-      imageName = `${Date.now()}-uploaded.${ext}`;
-      const filepath = require("path").join(__dirname, "../uploads", imageName);
-      require("fs").writeFileSync(filepath, buffer);
+    try {
+      const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (matches && matches.length === 3) {
+        const ext = matches[1].split("/")[1];
+        const buffer = Buffer.from(matches[2], 'base64');
+        const filename = `${Date.now()}-uploaded.${ext}`;
+        const filepath = require("path").join(__dirname, "../uploads", filename);
+        require("fs").writeFileSync(filepath, buffer);
+        imageName = filename;
+      }
+    } catch (err) {
+      console.warn("Write to filesystem failed, storing image string directly:", err.message);
+      imageName = image;
     }
   }
 
@@ -119,7 +124,6 @@ const createProduct = (req, res) => {
       imageName
     ],
     (err, result) => {
-
       if (err) {
         return res.status(500).json({
           success: false,
@@ -132,16 +136,12 @@ const createProduct = (req, res) => {
         message: "Produk berhasil ditambahkan",
         productId: result.insertId
       });
-
     }
   );
-
 };
 
 const updateProduct = (req, res) => {
-
   const { id } = req.params;
-
   const {
     name,
     description,
@@ -151,21 +151,28 @@ const updateProduct = (req, res) => {
     image
   } = req.body;
 
-  let imageName = null;
-  if (image && image.startsWith("data:image/")) {
-    const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (matches && matches.length === 3) {
-      const ext = matches[1].split("/")[1];
-      const buffer = Buffer.from(matches[2], 'base64');
-      imageName = `${Date.now()}-uploaded.${ext}`;
-      const filepath = require("path").join(__dirname, "../uploads", imageName);
-      require("fs").writeFileSync(filepath, buffer);
+  let imageName = image !== undefined ? image : null;
+  if (image && typeof image === "string" && image.startsWith("data:image/")) {
+    try {
+      const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (matches && matches.length === 3) {
+        const ext = matches[1].split("/")[1];
+        const buffer = Buffer.from(matches[2], 'base64');
+        const filename = `${Date.now()}-uploaded.${ext}`;
+        const filepath = require("path").join(__dirname, "../uploads", filename);
+        require("fs").writeFileSync(filepath, buffer);
+        imageName = filename;
+      }
+    } catch (err) {
+      console.warn("Write to filesystem failed, storing image string directly:", err.message);
+      imageName = image;
     }
   }
 
   let sql;
   let params;
-  if (imageName) {
+
+  if (imageName !== undefined && imageName !== null && imageName !== "") {
     sql = `
       UPDATE products
       SET
@@ -196,7 +203,6 @@ const updateProduct = (req, res) => {
     sql,
     params,
     (err, result) => {
-
       if (err) {
         return res.status(500).json({
           success: false,
@@ -215,10 +221,8 @@ const updateProduct = (req, res) => {
         success: true,
         message: "Produk berhasil diperbarui"
       });
-
     }
   );
-
 };
 
 const deleteProduct = (req, res) => {
