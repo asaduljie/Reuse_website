@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, FormEvent, ChangeEvent, DragEvent } from "react";
+import { useState, useRef, useEffect, FormEvent, ChangeEvent, DragEvent, ClipboardEvent } from "react";
 
 export interface ProductFormData {
 
@@ -86,13 +86,13 @@ export default function ProductForm({
 
     ) {
 
-        setForm({
+        setForm((prev) => ({
 
-            ...form,
+            ...prev,
 
             [key]: value,
 
-        });
+        }));
 
     }
 
@@ -135,6 +135,46 @@ export default function ProductForm({
             handleImageFile(file);
         }
     }
+
+    function handlePaste(e: ClipboardEvent<HTMLDivElement>) {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (item.type.startsWith("image/")) {
+                const file = item.getAsFile();
+                if (file) {
+                    handleImageFile(file);
+                    e.preventDefault();
+                    break;
+                }
+            }
+        }
+    }
+
+    useEffect(() => {
+        function handleGlobalPaste(e: globalThis.ClipboardEvent) {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.type.startsWith("image/")) {
+                    const file = item.getAsFile();
+                    if (file) {
+                        handleImageFile(file);
+                        break;
+                    }
+                }
+            }
+        }
+
+        window.addEventListener("paste", handleGlobalPaste);
+        return () => {
+            window.removeEventListener("paste", handleGlobalPaste);
+        };
+    }, []);
 
     function handleRemoveImage() {
         handleChange("image", "");
@@ -504,7 +544,9 @@ export default function ProductForm({
                     }}
                     onDragLeave={() => setDragOver(false)}
                     onDrop={handleDrop}
-                    className={`mt-2 border-dashed border-2 rounded-2xl p-6 text-center transition ${
+                    onPaste={handlePaste}
+                    tabIndex={0}
+                    className={`mt-2 border-dashed border-2 rounded-2xl p-6 text-center transition outline-none focus:border-[#145A3B] focus:ring-2 focus:ring-[#145A3B]/20 ${
                         dragOver
                             ? "border-[#145A3B] bg-[#eff9f2]"
                             : "border-gray-300 bg-white"
@@ -519,12 +561,12 @@ export default function ProductForm({
                     />
                     <div className="space-y-3">
                         <p className="text-sm text-gray-600">
-                            Seret dan lepaskan gambar di sini, atau klik untuk memilih file.
+                            Seret &amp; lepaskan gambar di sini, <strong>Paste (Ctrl+V)</strong>, atau klik untuk memilih file.
                         </p>
                         <button
                             type="button"
                             onClick={openFilePicker}
-                            className="text-sm font-semibold text-[#145A3B] underline"
+                            className="text-sm font-semibold text-[#145A3B] underline cursor-pointer"
                         >
                             Pilih Gambar
                         </button>

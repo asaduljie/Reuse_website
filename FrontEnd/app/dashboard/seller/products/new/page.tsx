@@ -1,3 +1,39 @@
 "use client";
-import { useState } from "react"; import { useRouter } from "next/navigation"; import { getUser } from "@/utils/auth"; import { getSellerByUserId } from "@/services/sellerService"; import { createProduct } from "@/services/productService";
-export default function NewSellerProductPage() { const router = useRouter(); const [form, setForm] = useState({ name: "", description: "", price: 0, stock: 0, category: "", image: "" }); const change = (key: string, value: string | number) => setForm({ ...form, [key]: value }); return <form onSubmit={async e => { e.preventDefault(); const user = getUser(); const seller = user ? getSellerByUserId(Number(user.id)) : undefined; if (!seller) return; await createProduct({ ...form, sellerId: seller.id, seller_id: seller.id, status: "active" }); router.push("/dashboard/seller/products"); }} className="max-w-2xl space-y-4 rounded-xl bg-white p-6"><h1 className="text-3xl font-black">Tambah Produk</h1>{(["name", "description", "category", "image"] as const).map(key => <label key={key} className="block font-bold">{key}<input required value={form[key]} onChange={e => change(key, e.target.value)} className="mt-2 w-full rounded-xl border px-4 py-3 font-normal"/></label>)}{(["price", "stock"] as const).map(key => <label key={key} className="block font-bold">{key}<input required min={0} type="number" value={form[key]} onChange={e => change(key, Number(e.target.value))} className="mt-2 w-full rounded-xl border px-4 py-3 font-normal"/></label>)}<button className="rounded-xl bg-[#145A3B] px-5 py-3 font-bold text-white">Simpan Produk</button></form>; }
+
+import { useRouter } from "next/navigation";
+import ProductForm, { ProductFormData } from "@/components/dashboard/products/productForm";
+import ProductHeader from "@/components/dashboard/products/productHeader";
+import { getCategories } from "@/services/categoryService";
+import { createProduct } from "@/services/productService";
+import { getUser } from "@/utils/auth";
+import { getSellerByUserId } from "@/services/sellerService";
+
+export default function NewSellerProductPage() {
+  const router = useRouter();
+  const categories = getCategories().map((c) => c.name);
+
+  const handleSubmit = async (data: ProductFormData) => {
+    const user = getUser();
+    const seller = user ? getSellerByUserId(Number(user.id)) : undefined;
+
+    await createProduct({
+      ...data,
+      sellerId: seller?.id,
+      seller_id: seller?.id,
+    });
+
+    router.push("/dashboard/seller/products");
+  };
+
+  return (
+    <div className="space-y-6">
+      <ProductHeader
+        title="Tambah Produk Baru"
+        description="Unggah produk preloved Anda dengan mudah (bisa Drag & Drop atau Paste Ctrl+V gambar)."
+        addUrl="/dashboard/seller/products"
+        buttonText="Kembali"
+      />
+      <ProductForm categories={categories} onSubmit={handleSubmit} submitLabel="Simpan Produk" />
+    </div>
+  );
+}
