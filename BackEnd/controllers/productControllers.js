@@ -1,37 +1,35 @@
 const db = require("../config/db");
 
-const getAllProducts = (req, res) => {
+const formatImageUrl = (image) => {
+  if (!image) return null;
+  if (typeof image === "string" && (image.startsWith("data:") || image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"))) {
+    return image;
+  }
+  const port = process.env.PORT || 5000;
+  return `http://localhost:${port}/uploads/${image}`;
+};
 
-  const sql =
-    "SELECT * FROM products";
+const getAllProducts = (req, res) => {
+  const sql = "SELECT * FROM products";
 
   db.query(sql, (err, result) => {
-
     if (err) {
       return res.status(500).json({
         success: false,
         error: err.message
       });
     }
-    
-   const products = result.map(product => {
 
-  return {
-    ...product,
-    imageUrl: product.image
-      ? `http://localhost:${process.env.PORT}/uploads/${product.image}`
-      : null
-  };
-
-});
+    const products = result.map(product => ({
+      ...product,
+      imageUrl: formatImageUrl(product.image)
+    }));
 
     res.json({
       success: true,
       products: products
     });
-
   });
-
 };
 
 const getProductById = (req, res) => {
@@ -58,18 +56,14 @@ const getProductById = (req, res) => {
     }
 
     const product = {
-  ...result[0],
-  imageUrl: result[0].image
-    ? `http://localhost:${process.env.PORT}/uploads/${result[0].image}`
-    : null
-};
+      ...result[0],
+      imageUrl: formatImageUrl(result[0].image)
+    };
     res.json({
       success: true,
       product: product
     });
-
   });
-
 };
 
 const createProduct = (req, res) => {
@@ -354,7 +348,7 @@ const getLatestProducts = (req, res) => {
 
     const products = result.map(p => ({
       ...p,
-      imageUrl: p.image ? `http://localhost:${process.env.PORT}/uploads/${p.image}` : null
+      imageUrl: formatImageUrl(p.image)
     }));
 
     res.json({ success: true, products });
@@ -371,7 +365,7 @@ const getFeaturedProducts = (req, res) => {
 
     const products = result.map(p => ({
       ...p,
-      imageUrl: p.image ? `http://localhost:${process.env.PORT}/uploads/${p.image}` : null
+      imageUrl: formatImageUrl(p.image)
     }));
 
     res.json({ success: true, products });
@@ -388,7 +382,7 @@ const getProductsByCategory = (req, res) => {
 
     const products = result.map(p => ({
       ...p,
-      imageUrl: p.image ? `http://localhost:${process.env.PORT}/uploads/${p.image}` : null
+      imageUrl: formatImageUrl(p.image)
     }));
 
     res.json({ success: true, products });
@@ -405,7 +399,7 @@ const getProductsBySellerRoute = (req, res) => {
 
     const products = result.map(p => ({
       ...p,
-      imageUrl: p.image ? `http://localhost:${process.env.PORT}/uploads/${p.image}` : null
+      imageUrl: formatImageUrl(p.image)
     }));
 
     res.json({ success: true, products });
@@ -425,7 +419,7 @@ const searchProducts = (req, res) => {
 
     const products = result.map(p => ({
       ...p,
-      imageUrl: p.image ? `http://localhost:${process.env.PORT}/uploads/${p.image}` : null
+      imageUrl: formatImageUrl(p.image)
     }));
 
     res.json({ success: true, products });

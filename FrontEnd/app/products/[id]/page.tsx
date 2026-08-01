@@ -346,8 +346,11 @@ Terima kasih.`;
               >
 
                 <img
-                  src={selectedImage}
+                  src={selectedImage || product.imageUrl || product.image || "/images/product1.jpg"}
                   alt={product.name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/images/product1.jpg";
+                  }}
                   className="
                   max-w-full
                   max-h-full
@@ -390,8 +393,11 @@ Terima kasih.`;
                 >
 
                   <img
-                    src={product.imageUrl}
+                    src={product.imageUrl || product.image || "/images/product1.jpg"}
                     alt={product.name}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/images/product1.jpg";
+                    }}
                     className="
                     w-full
                     h-full

@@ -91,7 +91,7 @@ const resolveProductImageUrl = (apiProduct: any): string => {
   if (img && typeof img === "string" && (img.startsWith("data:") || img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/"))) {
     return img;
   }
-  if (apiProduct.imageUrl && typeof apiProduct.imageUrl === "string" && !apiProduct.imageUrl.includes("undefined")) {
+  if (apiProduct.imageUrl && typeof apiProduct.imageUrl === "string" && !apiProduct.imageUrl.includes("undefined") && !apiProduct.imageUrl.includes("/uploads/data:")) {
     return apiProduct.imageUrl;
   }
   if (img) {
@@ -150,11 +150,15 @@ export const getProduct = (id: any): Product | undefined => {
 
 export const getProductById = async (id: any) => {
   try {
-    return await axios.get(`${API_URL}/${id}`);
+    const response = await axios.get(`${API_URL}/${id}`);
+    if (response.data && response.data.product) {
+      response.data.product = mapApiProductToProduct(response.data.product);
+    }
+    return response;
   } catch (err) {
     console.warn(`REST API getProductById(${id}) failed, falling back to local:`, err);
     const prod = products.find(p => Number(p.id) === Number(id)) || MOCK_PRODUCTS[0];
-    return { data: { success: true, product: prod } } as any;
+    return { data: { success: true, product: mapApiProductToProduct(prod) } } as any;
   }
 };
 
