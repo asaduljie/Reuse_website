@@ -95,6 +95,7 @@ export const viewport = {
 import FloatingChat from "../components/layout/FloatingChat";
 import GlobalAlertModal from "../components/common/GlobalAlertModal";
 import GlobalNavigationLoader from "../components/common/GlobalNavigationLoader";
+import LaptopNotificationProvider from "../components/common/LaptopNotificationProvider";
 
 export default function RootLayout({
   children,
@@ -140,6 +141,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <GlobalNavigationLoader>
+          <LaptopNotificationProvider />
           {children}
           <FloatingChat />
           <GlobalAlertModal />

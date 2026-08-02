@@ -4,8 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import NotificationBellButton from "./notifications/NotificationBell";
 import NotificationDropdown from "./notifications/NotificationDropdown";
 import { getNotifications, getUnreadCount, Notification } from "../../services/notificationService";
-import Link from "next/link";
-import { FaSearch, FaBars } from "react-icons/fa";
+import {
+  getLaptopNotificationPermission,
+  requestLaptopNotificationPermission,
+} from "../../services/laptopNotificationService";
+import { FaSearch, FaBars, FaLaptop, FaBell } from "react-icons/fa";
 
 interface TopbarProps {
   title: string;
@@ -18,6 +21,7 @@ export default function Topbar({ title, userName, role, onToggleSidebar }: Topba
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [laptopPerm, setLaptopPerm] = useState<string>("default");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const refresh = () => {
@@ -28,9 +32,15 @@ export default function Topbar({ title, userName, role, onToggleSidebar }: Topba
 
   useEffect(() => {
     refresh();
+    setLaptopPerm(getLaptopNotificationPermission());
     const interval = setInterval(refresh, 15000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleToggleLaptopNotif = async () => {
+    await requestLaptopNotificationPermission();
+    setLaptopPerm(getLaptopNotificationPermission());
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -71,6 +81,20 @@ export default function Topbar({ title, userName, role, onToggleSidebar }: Topba
             className="bg-transparent outline-none w-full text-sm font-semibold"
           />
         </div>
+
+        {/* Laptop Desktop Notification Toggle */}
+        <button
+          onClick={handleToggleLaptopNotif}
+          title={laptopPerm === "granted" ? "Notifikasi Laptop Aktif" : "Klik untuk mengaktifkan notifikasi laptop real-time"}
+          className={`hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border shadow-xs ${
+            laptopPerm === "granted"
+              ? "bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100"
+              : "bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100 animate-pulse"
+          }`}
+        >
+          <FaLaptop className={laptopPerm === "granted" ? "text-emerald-600" : "text-amber-600"} />
+          <span>{laptopPerm === "granted" ? "Notif Laptop: Aktif" : "Aktifkan Notif Laptop"}</span>
+        </button>
 
         {/* Notification Bell */}
         <div className="relative" ref={dropdownRef}>
