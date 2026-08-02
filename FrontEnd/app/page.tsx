@@ -18,6 +18,8 @@ import { getHomepageConfig, HomepageConfig } from "../services/homepageService";
 import { getCategories, Category } from "../services/categoryService";
 import { getBanners, Banner } from "../services/bannerService";
 import { getRecommendedForYou } from "../services/recommendationService";
+import { getSellerProfiles } from "../services/sellerService";
+import { getOrders } from "../services/orderService";
 
 export default function HomePage() {
   const [latestProducts, setLatestProducts] = useState<Product[]>([]);
@@ -26,6 +28,7 @@ export default function HomePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [promoBanners, setPromoBanners] = useState<Banner[]>([]);
   const [cmsConfig, setCmsConfig] = useState<HomepageConfig | null>(null);
+  const [stats, setStats] = useState<{ sellers: number; sold: number }>({ sellers: 0, sold: 0 });
 
   const [loadingLatest, setLoadingLatest] = useState(true);
   const [loadingFeatured, setLoadingFeatured] = useState(true);
@@ -55,6 +58,23 @@ export default function HomePage() {
       setRecommended(recs);
     };
     loadRecommendations();
+
+    const fetchRealStats = async () => {
+      try {
+        const sellersList = getSellerProfiles();
+        const ordersList = await getOrders();
+        const totalSold = ordersList.reduce((acc, order) => {
+          return acc + (order.items ? order.items.reduce((s, i) => s + (i.quantity || 1), 0) : 1);
+        }, 0);
+        setStats({
+          sellers: sellersList.length,
+          sold: totalSold,
+        });
+      } catch (e) {
+        // ignore
+      }
+    };
+    fetchRealStats();
   }, []);
 
   const loadLatestProducts = async () => {
@@ -401,26 +421,28 @@ export default function HomePage() {
             </section>
           )}
 
-          {/* STATS SECTION */}
-          <section className="mt-28">
-            <div className="bg-gradient-to-tr from-[#145A3B] to-[#1e7a50] rounded-[40px] p-12 text-white shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-              <div className="grid md:grid-cols-3 gap-10 text-center relative z-10">
-                <div className="space-y-2">
-                  <h3 className="text-5xl font-black">5K+</h3>
-                  <p className="text-green-100 text-sm font-semibold uppercase tracking-wider">Produk Terjual</p>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-5xl font-black">1.2K+</h3>
-                  <p className="text-green-100 text-sm font-semibold uppercase tracking-wider">Seller Terdaftar</p>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-5xl font-black">15 Ton</h3>
-                  <p className="text-green-100 text-sm font-semibold uppercase tracking-wider">Limbah Karbon Terkurangi</p>
+          {/* STATS SECTION - Automatically appears when real sellers count >= 10 OR sold products >= 50 */}
+          {(stats.sellers >= 10 || stats.sold >= 50) && (
+            <section className="mt-28">
+              <div className="bg-gradient-to-tr from-[#145A3B] to-[#1e7a50] rounded-[40px] p-12 text-white shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+                <div className="grid md:grid-cols-3 gap-10 text-center relative z-10">
+                  <div className="space-y-2">
+                    <h3 className="text-5xl font-black">{stats.sold}+</h3>
+                    <p className="text-green-100 text-sm font-semibold uppercase tracking-wider">Produk Terjual</p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-5xl font-black">{stats.sellers}+</h3>
+                    <p className="text-green-100 text-sm font-semibold uppercase tracking-wider">Seller Terdaftar</p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-5xl font-black">{(stats.sold * 0.005).toFixed(1)} Ton</h3>
+                    <p className="text-green-100 text-sm font-semibold uppercase tracking-wider">Limbah Karbon Terkurangi</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* WHY CHOOSE REUSE SECTION */}
           <section className="mt-28">
