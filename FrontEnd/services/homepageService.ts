@@ -47,7 +47,7 @@ const DEFAULT_HOMEPAGE_CONFIG: HomepageConfig = {
         { id: 3, question: "Berapa biaya pengiriman di ReUse?", answer: "Biaya pengiriman ditentukan secara default sesuai dengan tarif jarak pengantaran seller ke alamat Anda." }
     ],
     footerAbout: "ReUse Marketplace adalah platform jual beli barang bekas berkualitas demi gaya hidup berkelanjutan dan ramah lingkungan.",
-    footerPhone: "081234567890",
+    footerPhone: "0878-9096-6692",
     footerEmail: "support@reuse.com",
     footerAddress: "Jl. Hijau Lestari No. 12, Bandung, Jawa Barat"
 };

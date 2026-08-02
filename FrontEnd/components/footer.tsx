@@ -1,9 +1,7 @@
 import Link from "next/link";
 import {
-  FaFacebookF,
   FaInstagram,
-  FaTwitter,
-  FaLinkedin,
+  FaTiktok,
   FaMapMarkerAlt,
   FaPhoneAlt,
   FaEnvelope,
@@ -211,15 +209,20 @@ export default function Footer() {
 
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
 
               <FaPhoneAlt />
 
-              <span>
+              <a
+                href="https://wa.me/628789096692"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline font-semibold"
+              >
 
-                +62 812 3456 7890
+                +62 878-9096-6692
 
-              </span>
+              </a>
 
             </div>
 
@@ -248,7 +251,10 @@ export default function Footer() {
           >
 
             <a
-              href="#"
+              href="https://www.tiktok.com/@reusepedia?_r=1&_t=ZS-988fhCeaOdY"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="TikTok ReUse"
               className="
               w-11
               h-11
@@ -263,12 +269,15 @@ export default function Footer() {
               "
             >
 
-              <FaFacebookF />
+              <FaTiktok className="text-lg" />
 
             </a>
 
             <a
-              href="#"
+              href="https://www.instagram.com/reusepedia?igsh=bWd3ZjRoNWZjc3Zq"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Instagram ReUse"
               className="
               w-11
               h-11
@@ -283,47 +292,7 @@ export default function Footer() {
               "
             >
 
-              <FaInstagram />
-
-            </a>
-
-            <a
-              href="#"
-              className="
-              w-11
-              h-11
-              rounded-full
-              bg-white
-              text-[#145A3B]
-              flex
-              items-center
-              justify-center
-              hover:scale-110
-              transition
-              "
-            >
-
-              <FaTwitter />
-
-            </a>
-
-            <a
-              href="#"
-              className="
-              w-11
-              h-11
-              rounded-full
-              bg-white
-              text-[#145A3B]
-              flex
-              items-center
-              justify-center
-              hover:scale-110
-              transition
-              "
-            >
-
-              <FaLinkedin />
+              <FaInstagram className="text-xl" />
 
             </a>
 
