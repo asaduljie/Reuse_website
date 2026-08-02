@@ -39,6 +39,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://reuse.my.id",
   },
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" }
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" }
+    ],
+    shortcut: ["/icon.png"],
+  },
   openGraph: {
     title: "ReUse Marketplace - Platform Jual Beli Barang Preloved & Eco-Friendly",
     description:
