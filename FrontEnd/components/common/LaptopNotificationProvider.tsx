@@ -9,9 +9,12 @@ import {
 } from "../../services/laptopNotificationService";
 import { FaBell, FaCheckCircle, FaLaptop } from "react-icons/fa";
 
+import { usePathname } from "next/navigation";
+
 export default function LaptopNotificationProvider() {
   const [permission, setPermission] = useState<LaptopNotificationPermission>("default");
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setPermission(getLaptopNotificationPermission());
@@ -26,8 +29,9 @@ export default function LaptopNotificationProvider() {
     }
   };
 
-  if (permission === "granted" || bannerDismissed) {
-    return null; // Permission already granted or user dismissed top banner
+  // Only display the alert banner on admin / dashboard routes
+  if (!pathname?.startsWith("/dashboard") || permission === "granted" || bannerDismissed) {
+    return null;
   }
 
   return (

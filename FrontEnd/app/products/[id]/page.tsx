@@ -16,12 +16,19 @@ import {
 import { getSimilarProducts } from "../../../services/recommendationService";
 import { getUser } from "../../../utils/auth";
 import { addToWishlist, removeFromWishlist, isInWishlist } from "../../../services/wishlistService";
+import { getSellerProfile } from "../../../services/sellerService";
 
 import {
   FaHeart,
   FaShoppingCart,
   FaWhatsapp,
-  FaChevronRight
+  FaChevronRight,
+  FaStore,
+  FaComments,
+  FaPlus,
+  FaCheck,
+  FaCheckCircle,
+  FaStar
 } from "react-icons/fa";
 
 export default function ProductDetailPage() {
@@ -36,6 +43,9 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] =
     useState<Product | null>(null);
+
+  const [seller, setSeller] = useState<any>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const [products, setProducts] =
     useState<Product[]>([]);
@@ -60,9 +70,27 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     if (!product) return;
+
+    const sId = product.sellerId || 3;
+    const sellerData = getSellerProfile(sId) || {
+      id: sId,
+      storeName: sId === 3 ? "ReUse Store" : `Toko Thrift #${sId}`,
+      logo: sId === 3 ? "/images/sellers/reuse-logo.png" : "/images/product1.jpg",
+      verified: true,
+      rating: 4.8,
+      city: "Makassar",
+    };
+    setSeller(sellerData);
+
     const fetchSimilar = async () => {
-      const recs = await getSimilarProducts(product.id, 4);
-      setSimilarProducts(recs);
+      try {
+        const user = getUser();
+        const userId = user?.id || 4;
+        const recs = await getSimilarProducts(product.id, userId);
+        setSimilarProducts(recs);
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchSimilar();
 
@@ -588,6 +616,91 @@ Terima kasih.`;
 
                 </p>
 
+              </div>
+
+              {/* SELLER STORE CARD */}
+              <div className="mt-8 bg-gradient-to-r from-emerald-50/60 to-teal-50/60 border border-emerald-100 rounded-3xl p-5 shadow-xs">
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  {/* Store Avatar & Details */}
+                  <div className="flex items-center gap-4">
+                    <Link href={`/sellers/${product.sellerId || 3}`} className="relative shrink-0 group">
+                      <img
+                        src={seller?.logo || "/images/sellers/reuse-logo.png"}
+                        alt={seller?.storeName || "Seller Store"}
+                        className="w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-sm group-hover:scale-105 transition bg-white"
+                      />
+                      {seller?.verified !== false && (
+                        <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full border-2 border-white">
+                          <FaCheckCircle className="text-xs" />
+                        </div>
+                      )}
+                    </Link>
+
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Link
+                          href={`/sellers/${product.sellerId || 3}`}
+                          className="font-black text-gray-900 text-base sm:text-lg hover:text-[#145A3B] transition flex items-center gap-1.5"
+                        >
+                          {seller?.storeName || "ReUse Store"}
+                        </Link>
+                        <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <FaCheckCircle className="text-emerald-600" /> Terverifikasi
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-xs text-gray-500 font-semibold mt-1 flex-wrap">
+                        <span className="flex items-center gap-1 text-amber-500 font-bold">
+                          <FaStar /> {seller?.rating || 4.8} / 5.0
+                        </span>
+                        <span>•</span>
+                        <span>{seller?.city || "Makassar"}</span>
+                        <span>•</span>
+                        <span className="text-emerald-700 font-bold">Online 5 min lalu</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions: + Ikuti Toko & Chat Seller */}
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0 w-full sm:w-auto">
+                    <button
+                      onClick={() => setIsFollowing(!isFollowing)}
+                      className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer ${
+                        isFollowing
+                          ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          : "bg-[#145A3B] text-white hover:bg-emerald-900 shadow-xs"
+                      }`}
+                    >
+                      {isFollowing ? (
+                        <>
+                          <FaCheck className="text-xs" /> Mengikuti
+                        </>
+                      ) : (
+                        <>
+                          <FaPlus className="text-xs" /> Ikuti Toko
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        window.dispatchEvent(
+                          new CustomEvent("open_seller_chat", {
+                            detail: {
+                              sellerId: product.sellerId || 3,
+                              productName: product.name,
+                              productPrice: product.price,
+                              productImage: product.imageUrl || product.image,
+                            },
+                          })
+                        );
+                      }}
+                      className="flex-1 sm:flex-initial bg-white text-[#145A3B] hover:bg-emerald-100 border border-emerald-300 px-4 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
+                    >
+                      <FaComments className="text-sm text-[#145A3B]" /> Chat Seller
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <div
