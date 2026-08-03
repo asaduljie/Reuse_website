@@ -283,9 +283,14 @@ export default function SellerChatModal({
           {/* Threads List */}
           <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
             {filteredThreads.length === 0 ? (
-              <div className="p-8 text-center text-gray-400">
-                <FaComments className="text-3xl mx-auto mb-2 text-gray-300" />
-                <p className="text-xs font-bold">Belum ada obrolan dengan seller.</p>
+              <div className="p-8 text-center text-gray-400 flex flex-col items-center justify-center h-full">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-[#145A3B] flex items-center justify-center mb-3">
+                  <FaComments className="text-2xl" />
+                </div>
+                <p className="text-sm font-extrabold text-gray-800">Belum Ada Obrolan</p>
+                <p className="text-xs text-gray-500 font-medium mt-1 max-w-[240px] leading-relaxed">
+                  Obrolan Anda dengan seller akan muncul di sini. Klik tombol <span className="font-bold text-[#145A3B]">"Chat Seller"</span> di halaman detail produk untuk memulai chat baru.
+                </p>
               </div>
             ) : (
               filteredThreads.map((thread) => (

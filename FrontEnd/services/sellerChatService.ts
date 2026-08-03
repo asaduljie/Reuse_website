@@ -19,62 +19,9 @@ export interface SellerChatThread {
   messages: ChatMessage[];
 }
 
-const CHAT_STORAGE_KEY = "reuse_seller_chat_threads";
+const CHAT_STORAGE_KEY = "reuse_seller_chat_threads_v2";
 
-const DEFAULT_THREADS: SellerChatThread[] = [
-  {
-    sellerId: 3,
-    sellerName: "ReUse Store",
-    sellerLogo: "/images/sellers/reuse-logo.png",
-    sellerVerified: true,
-    lastMessage: "Halo kak, produk ReUse selalu diinspeksi kualitasnya sebelum dikirim ya! 😊",
-    lastTimestamp: "10:30 AM",
-    unread: true,
-    messages: [
-      {
-        id: "m1",
-        sender: "seller",
-        text: "Halo! Selamat datang di ReUse Store. Ada yang bisa kami bantu mengenai barang preloved kami?",
-        timestamp: "10:28 AM",
-      },
-      {
-        id: "m2",
-        sender: "user",
-        text: "Apakah produk Vintage Denim Jacket masih ready?",
-        timestamp: "10:29 AM",
-      },
-      {
-        id: "m3",
-        sender: "seller",
-        text: "Halo kak, produk ReUse selalu diinspeksi kualitasnya sebelum dikirim ya! 😊 Masih ready siap kirim hari ini.",
-        timestamp: "10:30 AM",
-      },
-    ],
-  },
-  {
-    sellerId: 1,
-    sellerName: "Toko Thrift Bandung",
-    sellerLogo: "/images/product1.jpg",
-    sellerVerified: true,
-    lastMessage: "Bisa kak, pengiriman langsung pakai GoSend / GrabExpress hari ini.",
-    lastTimestamp: "Kemarin",
-    unread: false,
-    messages: [
-      {
-        id: "tb1",
-        sender: "user",
-        text: "Apakah pengiriman bisa instan kak?",
-        timestamp: "Kemarin 14:15",
-      },
-      {
-        id: "tb2",
-        sender: "seller",
-        text: "Bisa kak, pengiriman langsung pakai GoSend / GrabExpress hari ini.",
-        timestamp: "Kemarin 14:18",
-      },
-    ],
-  },
-];
+const DEFAULT_THREADS: SellerChatThread[] = [];
 
 export const getSellerChatThreads = (): SellerChatThread[] => {
   if (typeof window === "undefined") return DEFAULT_THREADS;
