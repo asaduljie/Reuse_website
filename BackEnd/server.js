@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const Sentry = require("@sentry/node");
 require("dotenv").config();
 
 const db = require("./config/db");
@@ -18,6 +19,15 @@ const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 
+// Initialize Sentry error monitoring for BackEnd
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    tracesSampleRate: 1.0,
+  });
+  console.log("🛡️ Sentry.io BackEnd Error Monitoring Active");
+}
+
 // Disable Server Identification Header
 app.disable("x-powered-by");
 
@@ -25,7 +35,7 @@ app.disable("x-powered-by");
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
-    contentSecurityPolicy: false, // Managed at gateway/frontend level
+    contentSecurityPolicy: false,
   })
 );
 
@@ -73,7 +83,7 @@ app.use(
 app.get("/", (req, res) => {
   res.json({
     status: "online",
-    message: "ReUse Secure API Platform Running",
+    message: "ReUse Secure API Platform Running with Sentry Monitoring",
     timestamp: new Date().toISOString(),
   });
 });
@@ -90,6 +100,9 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error("Internal Security/Server Error:", err.stack || err.message);
+  if (process.env.SENTRY_DSN) {
+    Sentry.captureException(err);
+  }
   res.status(err.status || 500).json({
     success: false,
     message: process.env.NODE_ENV === "production" ? "Terjadi kesalahan pada server." : err.message,
