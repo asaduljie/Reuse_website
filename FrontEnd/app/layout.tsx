@@ -119,6 +119,7 @@ export default function RootLayout({
                   "@id": "https://reuse.my.id/#website",
                   "url": "https://reuse.my.id",
                   "name": "ReUse Marketplace",
+                  "alternateName": ["Reuse Marketplace Indonesia", "Marketplace ReUse", "ReUse"],
                   "description": "Platform tempat jual beli barang preloved berkualitas tinggi & eco-friendly di Indonesia",
                   "inLanguage": "id-ID",
                   "potentialAction": {
@@ -132,7 +133,11 @@ export default function RootLayout({
                   "@id": "https://reuse.my.id/#organization",
                   "name": "ReUse Marketplace",
                   "url": "https://reuse.my.id",
-                  "logo": "https://reuse.my.id/icon.png"
+                  "logo": "https://reuse.my.id/icon.png",
+                  "sameAs": [
+                    "https://www.instagram.com/reusepedia",
+                    "https://www.tiktok.com/@reusepedia"
+                  ]
                 }
               ]
             })
