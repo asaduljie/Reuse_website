@@ -156,20 +156,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         
         {/* LOGO */}
-        <Link href="/" className="flex items-center gap-2.5 group select-none shrink-0">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-400 to-lime-400 p-0.5 shadow-lg shadow-emerald-950/40 group-hover:scale-105 transition-transform duration-300">
-            <div className="w-full h-full bg-[#145A3B] rounded-[14px] flex items-center justify-center text-white">
-              <FaLeaf className="text-lg text-emerald-400 group-hover:rotate-12 transition-transform duration-300" />
-            </div>
+        <Link href="/" className="flex items-center gap-2 group select-none shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-sm">
+            <FaLeaf className="text-base text-white" />
           </div>
-          <div className="flex flex-col">
-            <span className="text-2xl sm:text-3xl font-black tracking-tight leading-none text-white">
-              <span className="text-emerald-400">Re</span>Use
-            </span>
-            <span className="text-[9px] font-extrabold text-emerald-300/80 tracking-widest uppercase mt-0.5">
-              Eco Luxury
-            </span>
-          </div>
+          <span className="text-2xl font-extrabold tracking-tight text-white">
+            <span className="text-emerald-400">Re</span>Use
+          </span>
         </Link>
 
         {/* SEARCH BAR (DESKTOP) */}
@@ -254,7 +247,7 @@ export default function Navbar() {
           <Link href="/wishlist" className="relative p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-emerald-100 hover:text-red-400 transition-all duration-300 border border-white/10">
             <FaHeart className="text-base" />
             {wishlistCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center animate-bounce shadow-md">
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center shadow-md">
                 {wishlistCount}
               </span>
             )}

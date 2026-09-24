@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import ChatWidget from "../ai/ChatWidget";
 import SellerChatModal from "../chat/SellerChatModal";
 import { getSellerChatThreads } from "../../services/sellerChatService";
-import { FaRobot, FaTimes, FaComments } from "react-icons/fa";
+import { FaTimes, FaComments } from "react-icons/fa";
 
 export default function FloatingChat() {
-  const [activeWidget, setActiveWidget] = useState<"none" | "ai" | "seller">("none");
+  const [activeWidget, setActiveWidget] = useState<"none" | "seller">("none");
   const [targetSellerId, setTargetSellerId] = useState<number | undefined>(undefined);
   const [targetProductName, setTargetProductName] = useState<string | undefined>(undefined);
   const [targetProductPrice, setTargetProductPrice] = useState<number | undefined>(undefined);
@@ -44,22 +43,15 @@ export default function FloatingChat() {
     };
   }, []);
 
-  // Hide chat widget completely on admin / super-admin / seller dashboard routes
   if (pathname.includes("/dashboard")) {
     return null;
   }
 
   return (
     <div className="fixed bottom-6 right-6 z-[1000] flex flex-col items-end gap-3 select-none">
-      {/* Widget Container overlays */}
-      {activeWidget === "ai" && (
-        <div className="shadow-2xl">
-          <ChatWidget onClose={() => setActiveWidget("none")} />
-        </div>
-      )}
-
+      {/* Seller Chat Modal overlay */}
       {activeWidget === "seller" && (
-        <div className="shadow-2xl">
+        <div className="shadow-xl">
           <SellerChatModal
             initialSellerId={targetSellerId}
             initialProductName={targetProductName}
@@ -70,68 +62,33 @@ export default function FloatingChat() {
         </div>
       )}
 
-      {/* Floating Action Buttons Group */}
-      <div className="flex flex-col items-end gap-3">
-        {/* 1. SELLER CHAT BUTTON (above AI button) */}
-        <div className="relative group">
-          <button
-            onClick={() => {
-              if (activeWidget === "seller") {
-                setActiveWidget("none");
-              } else {
-                setActiveWidget("seller");
-              }
-            }}
-            title="Obrolan / Live Chat Seller"
-            className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer ${
-              activeWidget === "seller"
-                ? "bg-emerald-800 text-white"
-                : "bg-emerald-600 hover:bg-emerald-700 text-white"
-            }`}
-          >
-            {activeWidget === "seller" ? (
-              <FaTimes className="text-xl animate-in spin-in duration-300" />
-            ) : (
-              <FaComments className="text-2xl animate-in zoom-in duration-300" />
-            )}
+      {/* Floating Action Button */}
+      <div className="relative group">
+        <button
+          onClick={() => {
+            setActiveWidget((prev) => (prev === "seller" ? "none" : "seller"));
+          }}
+          title="Chat Seller"
+          className={`w-13 h-13 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 cursor-pointer ${
+            activeWidget === "seller"
+              ? "bg-[#145A3B] text-white"
+              : "bg-[#145A3B] hover:bg-[#0f462d] text-white"
+          }`}
+        >
+          {activeWidget === "seller" ? (
+            <FaTimes className="text-lg" />
+          ) : (
+            <FaComments className="text-xl" />
+          )}
 
-            {/* Unread Red Dot */}
-            {hasUnreadSellerMsg && activeWidget !== "seller" && (
-              <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-bounce" />
-            )}
-          </button>
-          <span className="absolute right-16 top-3 bg-gray-900 text-white text-[11px] font-extrabold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none shadow-md">
-            💬 Chat Seller & Histori
-          </span>
-        </div>
-
-        {/* 2. AI ASSISTANT BUTTON */}
-        <div className="relative group">
-          <button
-            onClick={() => {
-              if (activeWidget === "ai") {
-                setActiveWidget("none");
-              } else {
-                setActiveWidget("ai");
-              }
-            }}
-            title="ReUse AI Assistant"
-            className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer ${
-              activeWidget === "ai"
-                ? "bg-[#145A3B] text-white"
-                : "bg-[#145A3B] hover:bg-[#0f462d] text-white"
-            }`}
-          >
-            {activeWidget === "ai" ? (
-              <FaTimes className="text-xl animate-in spin-in duration-300" />
-            ) : (
-              <FaRobot className="text-2xl animate-in zoom-in duration-300" />
-            )}
-          </button>
-          <span className="absolute right-16 top-3 bg-gray-900 text-white text-[11px] font-extrabold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none shadow-md">
-            🤖 ReUse AI Agent
-          </span>
-        </div>
+          {/* Unread Red Indicator */}
+          {hasUnreadSellerMsg && activeWidget !== "seller" && (
+            <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-white" />
+          )}
+        </button>
+        <span className="absolute right-15 top-2.5 bg-gray-900 text-white text-[11px] font-bold px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none shadow-sm">
+          Chat Seller
+        </span>
       </div>
     </div>
   );
