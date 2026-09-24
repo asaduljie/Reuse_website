@@ -224,7 +224,7 @@ export default function ProductDetailPage() {
 
     const message =
 
-`Halo Admin ReUse 👋
+`Halo Admin ReUse,
 
 Saya tertarik dengan produk berikut.
 

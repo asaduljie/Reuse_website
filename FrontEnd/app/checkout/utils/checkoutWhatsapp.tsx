@@ -18,7 +18,7 @@ export default async function checkoutWhatsapp({
   let totalItem = 0;
   let totalPrice = 0;
 
-  let message = `Halo Admin ReUse 👋
+  let message = `Halo Admin ReUse,
 
 Saya ingin melakukan pemesanan produk.
 
