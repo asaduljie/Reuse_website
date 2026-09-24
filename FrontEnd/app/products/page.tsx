@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import Navbar from "../../components/navbar";
 import Footer from "../../components/footer";
 import ProductCard from "../../components/ProductCard";
+import { FaSearch } from "react-icons/fa";
 
 import { getCategories } from "../../services/categoryService";
 import {
@@ -297,158 +298,73 @@ function ProductsPageContent() {
           </div>
 
           {/* FILTER */}
-                    <section
-            className="
-            bg-white
-            rounded-[32px]
-            p-8
-            shadow-sm
-            mb-10
-            "
-          >
-
-            <div
-              className="
-              grid
-              lg:grid-cols-4
-              gap-5
-              "
-            >
+          {/* FILTER */}
+          <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 mb-10">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
               {/* SEARCH */}
-
-              <input
-                type="text"
-                placeholder="Cari produk..."
-                value={search}
-                onChange={(e)=>{
-
-                  setSearch(e.target.value);
-
-                  setCurrentPage(1);
-
-                }}
-                className="
-                lg:col-span-2
-                border
-                rounded-2xl
-                px-5
-                py-4
-                outline-none
-                focus:border-[#145A3B]
-                "
-              />
+              <div className="lg:col-span-2 relative flex items-center">
+                <FaSearch className="absolute left-4 text-slate-400 text-sm pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Cari produk preloved..."
+                  value={search}
+                  onChange={(e)=>{
+                    setSearch(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="w-full pl-11 pr-5 py-3.5 bg-slate-50/70 border border-slate-200 rounded-2xl outline-none text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                />
+              </div>
 
               {/* CATEGORY */}
-
               <select
                 value={selectedCategory}
                 onChange={(e)=>{
-
-                  setSelectedCategory(
-                    e.target.value
-                  );
-
+                  setSelectedCategory(e.target.value);
                   setCurrentPage(1);
-
                 }}
-                className="
-                border
-                rounded-2xl
-                px-5
-                py-4
-                outline-none
-                "
+                className="w-full px-5 py-3.5 bg-slate-50/70 border border-slate-200 rounded-2xl outline-none text-xs sm:text-sm font-medium text-slate-800 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all cursor-pointer"
               >
-
-                {
-
-                  categories.map(
-
-                    category=>(
-
-                      <option
-                        key={category}
-                        value={category}
-                      >
-
-                        {category}
-
-                      </option>
-
-                    )
-
-                  )
-
-                }
-
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category === "Semua" ? "Semua Kategori" : category}
+                  </option>
+                ))}
               </select>
 
               {/* SORT */}
-
               <select
                 value={sortBy}
                 onChange={(e)=>{
-
-                  setSortBy(
-                    e.target.value
-                  );
-
+                  setSortBy(e.target.value);
                   setCurrentPage(1);
-
                 }}
-                className="
-                border
-                rounded-2xl
-                px-5
-                py-4
-                outline-none
-                "
+                className="w-full px-5 py-3.5 bg-slate-50/70 border border-slate-200 rounded-2xl outline-none text-xs sm:text-sm font-medium text-slate-800 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all cursor-pointer"
               >
-
-                <option value="latest">
-
-                  Terbaru
-
-                </option>
-
-                <option value="price_low">
-
-                  Harga Terendah
-
-                </option>
-
-                <option value="price_high">
-
-                  Harga Tertinggi
-
-                </option>
-
+                <option value="latest">Urutkan: Terbaru</option>
+                <option value="price_low">Harga: Terendah</option>
+                <option value="price_high">Harga: Tertinggi</option>
               </select>
 
             </div>
 
-            <div
-              className="
-              mt-6
-              text-gray-500
-              "
-            >
-
-              Menampilkan
-
-              <b>
-
-                {" "}
-
-                {filteredProducts.length}
-
-              </b>
-
-              {" "}produk
-
+            <div className="mt-5 flex items-center justify-between text-xs text-slate-500 font-medium">
+              <span>Menampilkan <strong className="text-slate-800 font-bold">{filteredProducts.length}</strong> produk</span>
+              {(search || selectedCategory !== "Semua" || sortBy !== "latest") && (
+                <button
+                  onClick={() => {
+                    setSearch("");
+                    setSelectedCategory("Semua");
+                    setSortBy("latest");
+                    setCurrentPage(1);
+                  }}
+                  className="text-emerald-600 hover:text-emerald-700 font-bold hover:underline cursor-pointer"
+                >
+                  Reset Filter
+                </button>
+              )}
             </div>
-
           </section>
 
           {
@@ -605,125 +521,41 @@ function ProductsPageContent() {
             </div>
 
           }
-                    {/* PAGINATION */}
+          {/* PAGINATION */}
 
-          {
-
-            totalPage > 1 && (
-
-              <section
-                className="
-                flex
-                justify-center
-                items-center
-                gap-3
-                mt-14
-                "
+          {totalPage > 1 && (
+            <section className="flex justify-center items-center gap-2 sm:gap-3 mt-14">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 transition-all cursor-pointer shadow-xs"
               >
+                ← Prev
+              </button>
 
+              {[...Array(totalPage)].map((_, index) => (
                 <button
-
-                  disabled={currentPage===1}
-
-                  onClick={()=>setCurrentPage(currentPage-1)}
-
-                  className="
-                  px-5
-                  py-3
-                  rounded-xl
-                  border
-                  bg-white
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-                  hover:bg-gray-100
-                  transition
-                  "
-
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`w-10 h-10 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                    currentPage === index + 1
+                      ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20"
+                      : "bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700"
+                  }`}
                 >
-
-                  Previous
-
+                  {index + 1}
                 </button>
+              ))}
 
-                {
-
-                  [...Array(totalPage)].map(
-
-                    (_,index)=>(
-
-                      <button
-
-                        key={index}
-
-                        onClick={()=>setCurrentPage(index+1)}
-
-                        className={`
-
-                        w-12
-
-                        h-12
-
-                        rounded-xl
-
-                        transition
-
-                        ${
-
-                          currentPage===index+1
-
-                          ?
-
-                          "bg-[#145A3B] text-white"
-
-                          :
-
-                          "bg-white border hover:bg-gray-100"
-
-                        }
-
-                        `}
-
-                      >
-
-                        {index+1}
-
-                      </button>
-
-                    )
-
-                  )
-
-                }
-
-                <button
-
-                  disabled={currentPage===totalPage}
-
-                  onClick={()=>setCurrentPage(currentPage+1)}
-
-                  className="
-                  px-5
-                  py-3
-                  rounded-xl
-                  border
-                  bg-white
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-                  hover:bg-gray-100
-                  transition
-                  "
-
-                >
-
-                  Next
-
-                </button>
-
-              </section>
-
-            )
-
-          }
+              <button
+                disabled={currentPage === totalPage}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 transition-all cursor-pointer shadow-xs"
+              >
+                Next →
+              </button>
+            </section>
+          )}
 
           {/* MARKETPLACE BANNER */}
 

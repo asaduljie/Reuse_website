@@ -695,9 +695,9 @@ Terima kasih.`;
                           })
                         );
                       }}
-                      className="flex-1 sm:flex-initial bg-white text-[#145A3B] hover:bg-emerald-100 border border-emerald-300 px-4 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
+                      className="flex-1 sm:flex-initial bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 border border-emerald-400/30 px-4 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-md"
                     >
-                      <FaComments className="text-sm text-[#145A3B]" /> Chat Seller
+                      <FaComments className="text-sm text-emerald-200" /> Chat Seller
                     </button>
                   </div>
                 </div>

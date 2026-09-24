@@ -33,7 +33,7 @@ export default function Footer() {
             />
             <button
               type="submit"
-              className="px-5 py-3 rounded-xl bg-white text-[#145A3B] font-bold text-xs hover:bg-emerald-50 transition shadow-sm flex items-center justify-center gap-2 shrink-0 cursor-pointer"
+              className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 text-[#062416] font-black text-xs hover:from-emerald-300 hover:to-teal-300 transition shadow-md flex items-center justify-center gap-2 shrink-0 cursor-pointer"
             >
               <span>Berlangganan</span>
               <FaArrowRight className="text-xs" />
@@ -146,7 +146,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title="TikTok ReUse"
-                  className="w-9 h-9 rounded-full bg-white text-[#145A3B] flex items-center justify-center hover:bg-emerald-50 transition"
+                  className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center hover:from-emerald-300 hover:to-emerald-500 shadow-md transition-all hover:scale-105"
                 >
                   <FaTiktok className="text-sm" />
                 </a>
@@ -156,7 +156,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Instagram ReUse"
-                  className="w-9 h-9 rounded-full bg-white text-[#145A3B] flex items-center justify-center hover:bg-emerald-50 transition"
+                  className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center hover:from-emerald-300 hover:to-emerald-500 shadow-md transition-all hover:scale-105"
                 >
                   <FaInstagram className="text-base" />
                 </a>

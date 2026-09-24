@@ -135,7 +135,7 @@ export default function HomePage() {
               Jelajahi Produk →
             </button>
             <Link href="/login">
-              <button className="bg-white text-[#145A3B] font-extrabold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-emerald-50 transition shadow-md cursor-pointer">
+              <button className="bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-[#062416] font-black text-xs sm:text-sm px-5.5 py-2.5 rounded-xl transition shadow-md hover:shadow-emerald-400/20 cursor-pointer">
                 Masuk
               </button>
             </Link>
@@ -165,7 +165,7 @@ export default function HomePage() {
                   sessionStorage.setItem("has_seen_landing", "true");
                   setShowLanding(false);
                 }}
-                className="w-full sm:w-auto bg-white text-[#145A3B] font-extrabold text-sm sm:text-base px-8 py-3.5 rounded-xl hover:bg-emerald-50 transition shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-[#062416] font-black text-sm sm:text-base px-8 py-3.5 rounded-xl hover:from-emerald-300 hover:to-teal-400 transition shadow-xl shadow-emerald-950/40 hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Mulai Belanja</span>
                 <FaArrowRight className="text-xs" />
@@ -363,7 +363,7 @@ export default function HomePage() {
                       <h3 className="text-lg font-bold">{banner.title}</h3>
                       <p className="text-xs text-emerald-100/90 font-normal">{banner.subtitle}</p>
                       <Link href={banner.buttonLink || "/products"}>
-                        <button className="bg-white text-[#145A3B] text-xs font-bold px-4 py-2 rounded-lg mt-2 hover:bg-emerald-50 transition cursor-pointer">
+                        <button className="bg-gradient-to-r from-emerald-400 to-teal-400 text-[#062416] text-xs font-black px-4 py-2 rounded-xl mt-2 hover:from-emerald-300 hover:to-teal-300 transition shadow-md cursor-pointer">
                           {banner.buttonText || "Lihat Promo"}
                         </button>
                       </Link>
@@ -512,7 +512,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-6">
                 <Link href="/products">
-                  <button className="bg-white text-[#145A3B] px-6 py-3 rounded-xl font-bold text-xs sm:text-sm hover:bg-emerald-50 transition cursor-pointer">
+                  <button className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-[#062416] px-7 py-3 rounded-xl font-black text-xs sm:text-sm hover:from-emerald-300 hover:to-teal-400 transition shadow-lg cursor-pointer">
                     Belanja Produk
                   </button>
                 </Link>

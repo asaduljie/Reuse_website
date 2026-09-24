@@ -40,7 +40,7 @@ export default function BannerPreview({
                     </p>
                 )}
                 <div>
-                    <button type="button" className="bg-white text-[#145A3B] font-bold text-xs px-5 py-3 rounded-xl hover:bg-green-50 transition shadow-sm">
+                    <button type="button" className="bg-gradient-to-r from-emerald-400 to-teal-400 text-[#062416] font-black text-xs px-5.5 py-3 rounded-xl hover:from-emerald-300 hover:to-teal-300 transition shadow-md">
                         {buttonText || "Belanja Sekarang"}
                     </button>
                 </div>
